@@ -1,10 +1,10 @@
 {% extends "Narwhal_Tutoring/layout.html" %}
 
 {% block body %}
-    {% if message %}
-        <div class="alert alert-primary" role="alert">{{ message }}</div>
-    {% endif %}
     <section id="login">
+        {% if message %}
+            <div class="alert alert-warning" role="alert">{{ message }}</div>
+        {% endif %}
         <h2>Register</h2>
         <form action="{% url 'register' %}" method="post">
             {% csrf_token %}
@@ -22,8 +22,7 @@
             </div>
             <input class="btn btn-primary" type="submit" value="Register">
         </form>
+        Already have an account? <a href="{% url 'login' %}">Log In here.</a>
     </section>
-
-    Already have an account? <a href="{% url 'login' %}">Log In here.</a>
 
 {% endblock %}

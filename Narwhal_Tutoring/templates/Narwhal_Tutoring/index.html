@@ -44,4 +44,20 @@
         </div>
     </section>
 
+    <section id="featured-tutors" class="section-p1">
+        <h1 class="center-title">Featured Tutors</h1>
+        <div id="tutor-grid">
+            {% for tutor in tutors %}
+                <div class="tutor">
+                    <img class="pfp-large" src="{% static 'images/' %}{{ tutor.pfp_url }}" alt="{{ tutor.username }}'s Image">
+                    <h4>{{ tutor.username }}</h4>
+                    <h6>Atar: {{ tutor.atar }}</h6>
+                    <h6>Suburb: {{ tutor.suburb }}</h6>
+                    <h6>Subjects: {{ tutor.Subjects.all }}</h6>
+                    <button type="button" class="btn btn-primary">View Page</button>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
 {% endblock %}

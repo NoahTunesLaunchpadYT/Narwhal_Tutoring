@@ -22,6 +22,7 @@ h2 {
 
 h4 {
     font-size: 20px;
+    font-weight: 600;
     color: #222;
 }
 
@@ -131,6 +132,20 @@ div {
     background-color: #dfdffc;
 }
 
+#feature::after {
+    content: "";
+    display: block;
+    height: 2px;
+    width: 70%;
+    background-color: #ccc; /* Adjust the color as needed */
+    margin: auto; /* Adjust the margin to control the space above and below the line */
+    margin-top: 20px;
+}
+
+.center-title {
+    text-align: center;
+}
+
 #login {
     background-image: url("../images/hero.png");
     height: 100vh;
@@ -142,4 +157,30 @@ div {
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
+}
+
+#tutor-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; 
+}
+
+#tutor-grid .tutor {
+    width: 250px;
+    height: 400px;
+    padding: 15px;
+    margin: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+}
+
+.pfp-large {
+    width: 200px;
+    height: 200px;
+    border-radius: 20px;
+    display: block;
+    margin-bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
 }
