@@ -94,3 +94,9 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "Narwhal_Tutoring/register.html")
+    
+def about(request):
+    return render(request, "Narwhal_Tutoring/about.html")
+
+def contact(request):
+    return render(request, "Narwhal_Tutoring/contact.html")

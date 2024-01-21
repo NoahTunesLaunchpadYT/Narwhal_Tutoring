@@ -20,10 +20,17 @@ h2 {
     color: #222;
 }
 
+h3 {
+    font-size: 30px;
+    font-weight: 700;
+    color: #222;
+}
+
 h4 {
     font-size: 20px;
     font-weight: 600;
     color: #222;
+    margin-bottom: 10px;
 }
 
 h6 {
@@ -50,7 +57,7 @@ div {
     height: 100vh;
     width: 100%;
     background-size: cover;
-    background-position: top 25% right 0;
+    background-position: center right;
     padding: 80px;
     display: flex;
     flex-direction: column;
@@ -58,7 +65,7 @@ div {
     justify-content: center;
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 1000px) {
     #hero::before {
         content: "";
         position: absolute;
@@ -66,7 +73,7 @@ div {
         right: 0;
         bottom: 0;
         left: 0;
-        background-color: rgba(255, 255, 255, 0.5); /* White with 0.5 opacity */
+        background-color: rgba(255, 255, 255, 0.7); /* White with 0.5 opacity */
         z-index: 1; /* Place the overlay behind other content */
     }
 }
@@ -159,6 +166,10 @@ div {
     justify-content: center;
 }
 
+#featured-tutors {
+    background-image: url("../images/featured-tutors-backgrounds.png");
+}
+
 #tutor-grid {
     display: flex;
     flex-wrap: wrap;
@@ -167,20 +178,94 @@ div {
 
 #tutor-grid .tutor {
     width: 250px;
-    height: 400px;
-    padding: 15px;
+    height: 420px;
+    padding: 10px;
     margin: 10px;
     box-sizing: border-box;
     border: 1px solid #ccc;
-    border-radius: 20px;
+    border-radius: 30px;
+    box-shadow: 10px 10px 30px rgba(70, 62, 221, 0.03);
+    background-color: white;
+}
+
+#tutor-grid .tutor:hover {
+    box-shadow: 10px 10px 70px rgba(0, 0, 0, 0.1);
 }
 
 .pfp-large {
-    width: 200px;
-    height: 200px;
+    width: 230px;
+    height: 230px;
     border-radius: 20px;
     display: block;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     margin-left: auto;
     margin-right: auto;
+}
+
+ul {
+    font-size: 12px;
+    margin-left: 15px;
+    margin-bottom: 0px;
+}
+
+.tutor-info {
+    height: 120px;
+}
+
+#call-to-action {
+    height: 30vh;
+    background-color: #1d1f1e;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+#call-to-action div {
+    margin: 100px auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.dark h3 {
+    text-align: center;
+    color: white;
+}
+
+.dark a {
+    width: 150px;
+    margin: 0 auto;
+}
+
+.dark a button {
+    width: 100%;
+}
+
+.contacts {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 50px;
+    padding-top: 0px;
+}
+
+.contacts .contact {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+}
+
+.contacts .contact img {
+    height: 400px;
+    width: 400px;
+}
+
+.contacts .contact .text-box {
+    width: 400px;
+    height: 400px;
+    padding: 20px;
+    border: 1px solid black;
 }

@@ -4,8 +4,8 @@
 {% block body %}
     <section id="hero">
         <div id="hero-text">
-            <h1>Private Tutoring</h1>
-            <h2>in Perth</h2>
+            <h1>99 ATAR Private</h1>
+            <h2>Tutoring in Perth</h2>
             <p>Find a tutor now!</p>
             <div>
                 <button type="button" class="btn btn-primary">Tutors</button>
@@ -50,13 +50,44 @@
             {% for tutor in tutors %}
                 <div class="tutor">
                     <img class="pfp-large" src="{% static 'images/' %}{{ tutor.pfp_url }}" alt="{{ tutor.username }}'s Image">
-                    <h4>{{ tutor.username }}</h4>
-                    <h6>Atar: {{ tutor.atar }}</h6>
-                    <h6>Suburb: {{ tutor.suburb }}</h6>
-                    <h6>Subjects: {{ tutor.Subjects.all }}</h6>
-                    <button type="button" class="btn btn-primary">View Page</button>
+                    <div class="tutor-info">
+                        <h4>{{ tutor.username }}</h4>
+                        <ul>
+                            <li>
+                                Atar: {{ tutor.atar }}
+                            </li>
+                            <li>
+                                Suburb: {{ tutor.suburb }}
+                            </li>
+                            <li>
+                                Subjects: {{ tutor.Subjects.all }}
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button type="button" class="btn btn-primary">View Page</button>
+                    </div>
                 </div>
             {% endfor %}
+        </div>
+    </section>
+
+    <section id="call-to-action">
+        <div class="dark">
+            <h3>
+                Want to know more?
+            </h3>
+            <a href="{% url 'about' %}">
+                <button type="button" class="btn btn-secondary">About Us</button>
+            </a>
+        </div>
+        <div class="dark">
+            <h3>
+                Have any questions?
+            </h3>
+            <a href="{% url 'contact' %}">
+                <button type="button" class="btn btn-secondary">Contact Us</button>
+            </a>
         </div>
     </section>
 

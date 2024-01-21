@@ -1,0 +1,26 @@
+{% extends "Narwhal_Tutoring/layout.html" %}
+{% load static %}
+
+{% block body %}
+<a class="navbar-brand" href="{% url 'index'%}"><img src="{% static 'images/text_logo.png' %}" alt="Example Image" class="logo"></a>
+    <section class="section-p1">
+        <h1 class="center-title">
+            Contact Us
+        </h1>
+    </section>
+    <section class="contacts">
+        <div class="contact">
+            <img src="{% static 'images/Noah.png' %}" alt="Noah" class="logo">
+            <div class="text-box">
+                <h3>Noah West</h3>
+                <h4>Director of Narwhal Tutoring</h4>
+                <ul>
+                    <li>Whatsapp: <a href="wa.link/osspof">wa.link/osspof</a></li>
+                    <li>Phone: <a href="tel:+61421286031">0421286031</li></a>
+                    <li>Email: <a href="narwhaltutoring@gmail.com">narwhaltutoring@gmail.com</a></li>
+                </ul>
+                <
+            </div>
+        </div>
+    </section>
+{% endblock %}
