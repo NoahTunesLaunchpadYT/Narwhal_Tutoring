@@ -10,17 +10,36 @@
     </section>
     <section class="contacts">
         <div class="contact">
-            <img src="{% static 'images/Noah.png' %}" alt="Noah" class="logo">
+            <img src="{% static 'images/Noah.png' %}" alt="Noah">
             <div class="text-box">
                 <h3>Noah West</h3>
                 <h4>Director of Narwhal Tutoring</h4>
                 <ul>
-                    <li>Whatsapp: <a href="wa.link/osspof">wa.link/osspof</a></li>
+                    <li>Whatsapp: <a href="https://wa.link/osspof">wa.link/osspof</a> (recommended)</li>
                     <li>Phone: <a href="tel:+61421286031">0421286031</li></a>
-                    <li>Email: <a href="narwhaltutoring@gmail.com">narwhaltutoring@gmail.com</a></li>
+                    <li>Email: <a href="mailto:narwhaltutoring@gmail.com">narwhaltutoring@gmail.com</a></li>
                 </ul>
-                <
+                <p>Contact me for any questions about tutors, payments, this website and any other questions from parents and students.</p>
             </div>
         </div>
+        <div class="contact">
+            <img src="{% static 'images/Vyom.png' %}" alt="Vyom">
+            <div class="text-box">
+                <h3>Vyom Patoliya</h3>
+                <h4>Director of Narwhal Tutoring</h4>
+                <ul>
+                    <li>Whatsapp: <a href="https://wa.link/2kwlev">wa.link/2kwlev</a></li>
+                    <li>Phone: <a href="tel:+61406089073">0406089073</li></a>
+                    <li>Email: <a href="mailto:narwhaltutoring@gmail.com">narwhaltutoring@gmail.com</a></li>
+                </ul>
+                <p>Contact me for any questions about becoming a tutor or working with us.</p>
+            </div>
+        </div>
+        <p>
+            For the contact details of your tutor. Book your first lesson.
+        </p>
+        <a href="{% url 'tutors' %}">
+            <button type="button" class="btn btn-secondary" aria-label="Tutors Buttons">Tutors</button>
+        </a>
     </section>
 {% endblock %}

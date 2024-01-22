@@ -9,7 +9,10 @@ urlpatterns = [
     path("logout", views.logout_view, name="logout"),
     path("register", views.register, name="register"),
     path("about", views.about, name="about"),
-    path("contact", views.contact, name="contact")
+    path("contact", views.contact, name="contact"),
+    path("tutors", views.tutors, name='tutors'),
+    path("tos", views.tos, name="tos"),
+    path("dashboard", views.dashboard, name="dashboard")
 ]
 
 if settings.DEBUG:

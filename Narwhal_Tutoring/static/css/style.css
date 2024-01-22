@@ -52,6 +52,8 @@ div {
     height: 40px;
 }
 
+/* Home, login and register */
+
 #hero {
     background-image: url("../images/hero.png");
     height: 100vh;
@@ -143,7 +145,7 @@ div {
     content: "";
     display: block;
     height: 2px;
-    width: 70%;
+    width: 80%;
     background-color: #ccc; /* Adjust the color as needed */
     margin: auto; /* Adjust the margin to control the space above and below the line */
     margin-top: 20px;
@@ -168,6 +170,7 @@ div {
 
 #featured-tutors {
     background-image: url("../images/featured-tutors-backgrounds.png");
+    background-size: 100% 100%;
 }
 
 #tutor-grid {
@@ -178,7 +181,7 @@ div {
 
 #tutor-grid .tutor {
     width: 250px;
-    height: 420px;
+    height: 450px;
     padding: 10px;
     margin: 10px;
     box-sizing: border-box;
@@ -202,19 +205,24 @@ div {
     margin-right: auto;
 }
 
+.tutor-name {
+    margin-bottom: 0;
+    text-align: center;
+}
+
 ul {
-    font-size: 12px;
+    font-size: 16px;
     margin-left: 15px;
     margin-bottom: 0px;
 }
 
 .tutor-info {
-    height: 120px;
+    height: 150px;
 }
 
 #call-to-action {
     height: 30vh;
-    background-color: #1d1f1e;
+    background-color: #333;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -242,12 +250,16 @@ ul {
     width: 100%;
 }
 
+/* Contact Us */
+
 .contacts {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 50px;
     padding-top: 0px;
+    background-image: url("../images/contact-us-background.png");
+    background-size: 100% 100%;
 }
 
 .contacts .contact {
@@ -256,11 +268,14 @@ ul {
     justify-content: center;
     flex-wrap: wrap;
     box-sizing: border-box;
+    box-shadow: 10px 10px 70px rgba(70, 62, 221, 0.1);
+    background: #ffffff;
 }
 
 .contacts .contact img {
     height: 400px;
     width: 400px;
+    
 }
 
 .contacts .contact .text-box {
@@ -268,4 +283,136 @@ ul {
     height: 400px;
     padding: 20px;
     border: 1px solid black;
+}
+
+/* Footer */
+
+#footer-section {
+    display: flex;
+    background: #aaddff;
+    justify-content: flex-end;
+    align-items: flex-end;
+    min-height: 40vh;
+}
+
+.footer {
+    position: relative;
+    width: 100%;
+    background: #3586ff;
+    min-height: 100px;
+    padding: 20px 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.social-icon,
+.menu {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 0;
+    flex-wrap: wrap;
+}
+
+.social-icon__item,
+.menu__item {
+    list-style: none;
+}
+
+.social-icon__link {
+    font-size: 2rem;
+    color: #fff;
+    margin: 0 10px;
+    display: inline-block;
+    transition: 0.5s;
+}
+.social-icon__link:hover {
+    transform: translateY(-10px);
+}
+
+.menu__link {
+    font-size: 1.2rem;
+    color: #fff;
+    margin: 0 10px;
+    display: inline-block;
+    transition: 0.5s;
+    text-decoration: none;
+    opacity: 0.75;
+    font-weight: 300;
+}
+
+.menu__link:hover {
+    opacity: 1;
+}
+
+.footer p {
+color: #fff;
+margin: 15px 0 10px 0;
+font-size: 1rem;
+font-weight: 300;
+}
+
+.wave {
+    position: absolute;
+    top: -100px;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: url("https://i.ibb.co/wQZVxxk/wave.png");
+    background-size: 1000px 100px;
+}
+
+.wave#wave1 {
+    z-index: 1000;
+    opacity: 1;
+    animation: animateWaves 8s linear infinite;
+}
+
+.wave#wave2 {
+    z-index: 999;
+    opacity: 0.6;
+    animation: animate 10s linear infinite !important;
+}
+
+.wave#wave3 {
+    z-index: 1000;
+    opacity: 0.4;
+    animation: animateWaves 12s linear infinite;
+}
+
+.wave#wave4 {
+    z-index: 999;
+    opacity: 0.2;
+    animation: animate 20s linear infinite;
+}
+
+@keyframes animateWaves {
+    0% {
+        background-position-x: 1000px;
+    }
+    100% {
+        background-positon-x: 0px;
+    }
+}
+
+@keyframes animate {
+    0% {
+        background-position-x: -1000px;
+    }
+    100% {
+        background-positon-x: 0px;
+    }
+}
+
+/* Dashboard */
+
+#dashboard-panel {
+    margin: 0px 50px 50px 50px;
+    padding: 20px;
+    min-width: 400px;
+    border: 1px solid black;
+    border-radius: 20px;
 }

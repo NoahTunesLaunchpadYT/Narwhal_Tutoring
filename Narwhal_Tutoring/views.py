@@ -100,3 +100,12 @@ def about(request):
 
 def contact(request):
     return render(request, "Narwhal_Tutoring/contact.html")
+
+def tutors(request):
+    return render(request, "Narwhal_Tutoring/tutors.html")
+
+def tos(request):
+    return render(request, "Narwhal_Tutoring/tos.html")
+
+def dashboard(request):
+    return render(request, "Narwhal_Tutoring/dashboard.html")
