@@ -60,7 +60,10 @@
                                 Suburb: {{ tutor.suburb }}
                             </li>
                             <li>
-                                Subjects: {{ tutor.Subjects.all }}
+                                Subjects: 
+                                {% for subject in subjects %}
+                                    {{ subject }},
+                                {% endfor %}
                             </li>
                         </ul>
                     </div>

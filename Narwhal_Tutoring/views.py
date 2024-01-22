@@ -27,9 +27,11 @@ def index(request):
             tutor.pfp_url = 'default.png'
         tutor.save()
 
+    subjects = request.user.subjects.all()
 
     return render(request, "Narwhal_Tutoring/index.html", {
-        "tutors": tutors
+        "tutors": tutors,
+        "subjects": subjects
     })
 
 def login_view(request):
@@ -86,9 +88,9 @@ def register(request):
                 # Set default pfp_url if the file doesn't exist
                 user.pfp_url = 'default.png'
             user.save()
-        except IntegrityError as e:
-            return render(request, "Narwhal_Tutoring/register.html", {
-                "message": e
+        except IntegrityError:
+            return render(request, "network/register.html", {
+                "message": "Username already taken."
             })
         login(request, user)
         return HttpResponseRedirect(reverse("index"))
@@ -102,10 +104,61 @@ def contact(request):
     return render(request, "Narwhal_Tutoring/contact.html")
 
 def tutors(request):
-    return render(request, "Narwhal_Tutoring/tutors.html")
+    tutors = User.objects.all()
+    return render(request, "Narwhal_Tutoring/tutors.html", {
+        "tutors": tutors
+    })
 
 def tos(request):
     return render(request, "Narwhal_Tutoring/tos.html")
 
+# views.py
+from django.shortcuts import render, redirect
+from .models import User, Subject
+
 def dashboard(request):
-    return render(request, "Narwhal_Tutoring/dashboard.html")
+    subjects = Subject.objects.all()
+
+    if request.method == 'POST':
+        # Extract form data from request.POST
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        address = request.POST.get('address')
+        mobile = request.POST.get('mobile')
+        atar = request.POST.get('atar')
+        suburb = request.POST.get('suburb')
+        selected_subject_ids = request.POST.getlist('subjects')
+        description = request.POST.get('description')
+        university = request.POST.get('university')
+        degree = request.POST.get('degree')
+        available = 'available' in request.POST  # Checkbox handling
+
+        # Update the current user instance with the form data
+        user = request.user
+        user.username = username
+        user.email = email
+        user.address = address
+        user.mobile = mobile
+        user.atar = atar
+        user.suburb = suburb
+        user.subjects.set(selected_subject_ids)
+        user.description = description
+        user.university = university
+        user.degree = degree
+        user.available = available
+
+        # Save the user instance
+        try:
+            user.save()
+        except IntegrityError:
+            return render(request, "network/register.html", {
+
+                "message": "Username already taken.",
+                "subjects": subjects
+            })
+
+        return HttpResponseRedirect(reverse("dashboard"))  # Redirect to the dashboard after successful submission
+
+    return render(request, "Narwhal_Tutoring/dashboard.html", {
+        "subjects": subjects,
+    })

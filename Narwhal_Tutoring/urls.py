@@ -12,7 +12,7 @@ urlpatterns = [
     path("contact", views.contact, name="contact"),
     path("tutors", views.tutors, name='tutors'),
     path("tos", views.tos, name="tos"),
-    path("dashboard", views.dashboard, name="dashboard")
+    path("dashboard", views.dashboard, name="dashboard") 
 ]
 
 if settings.DEBUG:

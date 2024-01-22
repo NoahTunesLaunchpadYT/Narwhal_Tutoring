@@ -181,7 +181,7 @@ div {
 
 #tutor-grid .tutor {
     width: 250px;
-    height: 450px;
+    height: 470px;
     padding: 10px;
     margin: 10px;
     box-sizing: border-box;
@@ -211,7 +211,7 @@ div {
 }
 
 ul {
-    font-size: 16px;
+    font-size: 15px;
     margin-left: 15px;
     margin-bottom: 0px;
 }
