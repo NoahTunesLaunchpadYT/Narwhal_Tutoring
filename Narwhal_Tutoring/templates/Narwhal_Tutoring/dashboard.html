@@ -29,6 +29,8 @@
                 <div class="tab-pane fade show active" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
                     <form action="{% url 'dashboard' %}" method="post">
                         {% csrf_token %}
+
+                        <p>Hit the "Submit" button at the bottom to save changes</p>
                         
                         <!-- Available -->
                         <div class="mb-3 form-check">
@@ -86,7 +88,7 @@
                                     <label class="form-check-label" for="subject_{{ subject.id }}">{{ subject.name }}</label>
                                 </div>
                             {% endfor %}
-                        </div>
+                        </div>  
                         
                         <!-- Description -->
                         <div class="mb-3">
@@ -112,11 +114,91 @@
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>                                             
                 </div>
-                <div class="tab-pane fade" id="list-schedule" role="tabpanel" aria-labelledby="list-schedule-list">...</div>
+                <div class="tab-pane fade" id="list-schedule" role="tabpanel" aria-labelledby="list-schedule-list">
+                    {% if user.available %}
+                        You are listed as <strong>available</strong>.
+                    {% else %}
+                        You are listed as <strong>unavailable</strong>.
+                    {% endif %}
+                    
+                    <form class="timetable" action="{% url 'dashboard' %}" method="post">
+                        {% csrf_token %}
+
+                        <h5>Monday</h5>
+                        {% for time in times %}
+                            {% if time in user.availability.monday_times.all %}
+                                <input type="checkbox" id="timeslot" name="monday-{{ time }}" checked>
+                            {% else %}
+                                <input type="checkbox" id="timeslot" name="monday-{{ time }}">
+                            {% endif %}
+                        {% endfor %}
+
+                        <h5>Tuesday</h5>
+                        {% for time in times %}
+                            {% if time in user.availability.tuesday_times.all %}
+                                <input type="checkbox" id="timeslot" name="tuesday-{{ time }}" checked>
+                            {% else %}
+                                <input type="checkbox" id="timeslot" name="tuesday-{{ time }}">
+                            {% endif %}
+                        {% endfor %}
+
+                        <h5>Wednesday</h5>
+                        {% for time in times %}
+                            {% if time in user.availability.wednesday_times.all %}
+                                <input type="checkbox" id="timeslot" name="wednesday-{{ time }}" checked>
+                            {% else %}
+                                <input type="checkbox" id="timeslot" name="wednesday-{{ time }}">
+                            {% endif %}
+                        {% endfor %}
+
+                        <h5>Thursday</h5>
+                        {% for time in times %}
+                            {% if time in user.availability.thursday_times.all %}
+                                <input type="checkbox" id="timeslot" name="thursday-{{ time }}" checked>
+                            {% else %}
+                                <input type="checkbox" id="timeslot" name="thursday-{{ time }}">
+                            {% endif %}
+                        {% endfor %}
+
+                        <h5>Friday</h5>
+                        {% for time in times %}
+                            {% if time in user.availability.friday_times.all %}
+                                <input type="checkbox" id="timeslot" name="friday-{{ time }}" checked>
+                            {% else %}
+                                <input type="checkbox" id="timeslot" name="friday-{{ time }}">
+                            {% endif %}
+                        {% endfor %}
+
+                        <h5>Saturday</h5>
+                        {% for time in times %}
+                            {% if time in user.availability.saturday_times.all %}
+                                <input type="checkbox" id="timeslot" name="saturday-{{ time }}" checked>
+                            {% else %}
+                                <input type="checkbox" id="timeslot" name="saturday-{{ time }}">
+                            {% endif %}
+                        {% endfor %}
+
+                        <h5>Sunday</h5>
+                        {% for time in times %}
+                            {% if time in user.availability.sunday_times.all %}
+                                <input type="checkbox" id="timeslot" name="sunday-{{ time }}" checked>
+                            {% else %}
+                                <input type="checkbox" id="timeslot" name="sunday-{{ time }}">
+                            {% endif %}
+                        {% endfor %}
+
+
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
                 <div class="tab-pane fade" id="list-log" role="tabpanel" aria-labelledby="list-log-list">...</div>
                 <div class="tab-pane fade" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">...</div>
               </div>
             </div>
           </div>
     </section>
+{% endblock %}
+
+{% block script %}
+   <script src="{% static 'Narwhal_Tutoring/dashboard.js' %}"></script>
 {% endblock %}

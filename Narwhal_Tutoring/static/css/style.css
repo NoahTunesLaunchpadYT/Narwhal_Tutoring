@@ -416,3 +416,8 @@ font-weight: 300;
     border: 1px solid black;
     border-radius: 20px;
 }
+
+#calendar {
+    max-width: 1100px;
+    margin: 40px auto;
+}
