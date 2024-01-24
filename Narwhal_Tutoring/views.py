@@ -27,11 +27,8 @@ def index(request):
             tutor.pfp_url = 'default.png'
         tutor.save()
 
-    subjects = request.user.subjects.all()
-
     return render(request, "Narwhal_Tutoring/index.html", {
-        "tutors": tutors,
-        "subjects": subjects
+        "tutors": tutors
     })
 
 def login_view(request):
@@ -118,6 +115,14 @@ from .models import User, Subject
 
 def dashboard(request):
     subjects = Subject.objects.all()
+    times = TimeSlot.objects.all()
+    user = request.user
+
+    try:
+        availability = user.availability
+    except:
+        availability = TutorAvailability(tutor=user)
+        availability.save()
 
     if request.method == 'POST':
         # Extract form data from request.POST
@@ -134,7 +139,6 @@ def dashboard(request):
         available = 'available' in request.POST  # Checkbox handling
 
         # Update the current user instance with the form data
-        user = request.user
         user.username = username
         user.email = email
         user.address = address
@@ -151,14 +155,16 @@ def dashboard(request):
         try:
             user.save()
         except IntegrityError:
-            return render(request, "network/register.html", {
+            return render(request, "Narwhal_Tutoring/dashboard.html", {
 
                 "message": "Username already taken.",
-                "subjects": subjects
+                "subjects": subjects,
+                "times": times
             })
 
         return HttpResponseRedirect(reverse("dashboard"))  # Redirect to the dashboard after successful submission
 
     return render(request, "Narwhal_Tutoring/dashboard.html", {
         "subjects": subjects,
+        "times": times
     })

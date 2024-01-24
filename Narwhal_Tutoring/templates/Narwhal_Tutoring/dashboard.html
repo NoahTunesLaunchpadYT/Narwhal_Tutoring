@@ -15,8 +15,8 @@
                 {{ message }}
             </div>
         {% endif %}
-        <div class="row">
-            <div class="col-4">
+        <div class="row dashboard-nav">
+            <div class="col-12">
               <div class="list-group" id="list-tab" role="tablist">
                 <a class="list-group-item list-group-item-action active" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="profile">Profile</a>
                 <a class="list-group-item list-group-item-action" id="list-schedule-list" data-toggle="list" href="#list-schedule" role="tab" aria-controls="schedule">Schedule</a>
@@ -24,9 +24,12 @@
                 <a class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list" href="#list-settings" role="tab" aria-controls="settings">Settings</a>
               </div>
             </div>
-            <div class="col-8">
+        </div>
+        <div class="row dashboard-content">
+            <div class="col-12">
               <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade show active" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
+                    <h3>Profile</h3>
                     <form action="{% url 'dashboard' %}" method="post">
                         {% csrf_token %}
 
@@ -39,7 +42,7 @@
                         </div>
                     
                         <p>
-                            Only tutors who are "available" can gain new clients.
+                            (Only tutors who are "available" can gain new clients.)
                         </p>
                     
                         <!-- Username (name clients see) -->
@@ -115,84 +118,102 @@
                     </form>                                             
                 </div>
                 <div class="tab-pane fade" id="list-schedule" role="tabpanel" aria-labelledby="list-schedule-list">
+                    <h3>Schedule</h3>
                     {% if user.available %}
                         You are listed as <strong>available</strong>.
                     {% else %}
                         You are listed as <strong>unavailable</strong>.
                     {% endif %}
-                    
-                    <form class="timetable" action="{% url 'dashboard' %}" method="post">
-                        {% csrf_token %}
-
-                        <h5>Monday</h5>
-                        {% for time in times %}
-                            {% if time in user.availability.monday_times.all %}
-                                <input type="checkbox" id="timeslot" name="monday-{{ time }}" checked>
-                            {% else %}
-                                <input type="checkbox" id="timeslot" name="monday-{{ time }}">
-                            {% endif %}
-                        {% endfor %}
-
-                        <h5>Tuesday</h5>
-                        {% for time in times %}
-                            {% if time in user.availability.tuesday_times.all %}
-                                <input type="checkbox" id="timeslot" name="tuesday-{{ time }}" checked>
-                            {% else %}
-                                <input type="checkbox" id="timeslot" name="tuesday-{{ time }}">
-                            {% endif %}
-                        {% endfor %}
-
-                        <h5>Wednesday</h5>
-                        {% for time in times %}
-                            {% if time in user.availability.wednesday_times.all %}
-                                <input type="checkbox" id="timeslot" name="wednesday-{{ time }}" checked>
-                            {% else %}
-                                <input type="checkbox" id="timeslot" name="wednesday-{{ time }}">
-                            {% endif %}
-                        {% endfor %}
-
-                        <h5>Thursday</h5>
-                        {% for time in times %}
-                            {% if time in user.availability.thursday_times.all %}
-                                <input type="checkbox" id="timeslot" name="thursday-{{ time }}" checked>
-                            {% else %}
-                                <input type="checkbox" id="timeslot" name="thursday-{{ time }}">
-                            {% endif %}
-                        {% endfor %}
-
-                        <h5>Friday</h5>
-                        {% for time in times %}
-                            {% if time in user.availability.friday_times.all %}
-                                <input type="checkbox" id="timeslot" name="friday-{{ time }}" checked>
-                            {% else %}
-                                <input type="checkbox" id="timeslot" name="friday-{{ time }}">
-                            {% endif %}
-                        {% endfor %}
-
-                        <h5>Saturday</h5>
-                        {% for time in times %}
-                            {% if time in user.availability.saturday_times.all %}
-                                <input type="checkbox" id="timeslot" name="saturday-{{ time }}" checked>
-                            {% else %}
-                                <input type="checkbox" id="timeslot" name="saturday-{{ time }}">
-                            {% endif %}
-                        {% endfor %}
-
-                        <h5>Sunday</h5>
-                        {% for time in times %}
-                            {% if time in user.availability.sunday_times.all %}
-                                <input type="checkbox" id="timeslot" name="sunday-{{ time }}" checked>
-                            {% else %}
-                                <input type="checkbox" id="timeslot" name="sunday-{{ time }}">
-                            {% endif %}
-                        {% endfor %}
-
-
+                    <form action="{% url 'dashboard' %}" method="post">
+                        <div class="timetable">
+                            {% csrf_token %}
+                        
+                            <div class="column">
+                                <h6 class="day-header">Mon</h6>
+                                {% for time in times %}
+                                    {% if time in user.availability.monday_times.all %}
+                                        <input type="checkbox" class="timeslot" name="monday-{{ time }}" checked>
+                                    {% else %}
+                                        <input type="checkbox" class="timeslot" name="monday-{{ time }}">
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        
+                            <div class="column">
+                                <h6 class="day-header">Tue</h6>
+                                {% for time in times %}
+                                    {% if time in user.availability.tuesday_times.all %}
+                                        <input type="checkbox" class="timeslot" name="tuesday-{{ time }}" checked>
+                                    {% else %}
+                                        <input type="checkbox" class="timeslot" name="tuesday-{{ time }}">
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        
+                            <div class="column">
+                                <h6 class="day-header">Wed</h6>
+                                {% for time in times %}
+                                    {% if time in user.availability.wednesday_times.all %}
+                                        <input type="checkbox" class="timeslot" name="wednesday-{{ time }}" checked>
+                                    {% else %}
+                                        <input type="checkbox" class="timeslot" name="wednesday-{{ time }}">
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        
+                            <div class="column">
+                                <h6 class="day-header">Thu</h6>
+                                {% for time in times %}
+                                    {% if time in user.availability.thursday_times.all %}
+                                        <input type="checkbox" class="timeslot" name="thursday-{{ time }}" checked>
+                                    {% else %}
+                                        <input type="checkbox" class="timeslot" name="thursday-{{ time }}">
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        
+                            <div class="column">
+                                <h6 class="day-header">Fri</h6>
+                                {% for time in times %}
+                                    {% if time in user.availability.friday_times.all %}
+                                        <input type="checkbox" class="timeslot" name="friday-{{ time }}" checked>
+                                    {% else %}
+                                        <input type="checkbox" class="timeslot" name="friday-{{ time }}">
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        
+                            <div class="column">
+                                <h6 class="day-header">Sat</h6>
+                                {% for time in times %}
+                                    {% if time in user.availability.saturday_times.all %}
+                                        <input type="checkbox" class="timeslot" name="saturday-{{ time }}" checked>
+                                    {% else %}
+                                        <input type="checkbox" class="timeslot" name="saturday-{{ time }}">
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        
+                            <div class="column">
+                                <h6 class="day-header">Sun</h6>
+                                {% for time in times %}
+                                    {% if time in user.availability.sunday_times.all %}
+                                        <input type="checkbox" class="timeslot" name="sunday-{{ time }}" checked>
+                                    {% else %}
+                                        <input type="checkbox" class="timeslot" name="sunday-{{ time }}">
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>                        
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
                 </div>
-                <div class="tab-pane fade" id="list-log" role="tabpanel" aria-labelledby="list-log-list">...</div>
-                <div class="tab-pane fade" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">...</div>
+                <div class="tab-pane fade" id="list-log" role="tabpanel" aria-labelledby="list-log-list">
+                    <h3>Lesson Log</h3>
+                </div>
+                <div class="tab-pane fade" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">
+                    <h3>Settings</h3>
+                </div>
               </div>
             </div>
           </div>
