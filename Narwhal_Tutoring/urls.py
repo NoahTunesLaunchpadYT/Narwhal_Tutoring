@@ -12,7 +12,8 @@ urlpatterns = [
     path("contact", views.contact, name="contact"),
     path("tutors", views.tutors, name='tutors'),
     path("tos", views.tos, name="tos"),
-    path("dashboard", views.dashboard, name="dashboard") 
+    path("dashboard", views.dashboard, name="dashboard"),
+    path("submit-timetable", views.submit_timetable, name="submit-timetable")
 ]
 
 if settings.DEBUG:

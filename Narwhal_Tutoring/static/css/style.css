@@ -429,8 +429,6 @@ font-weight: 300;
 }
 
 .timetable {
-    border: 1px solid black;
-    border-radius: 10px;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -438,14 +436,49 @@ font-weight: 300;
 
 .timetable .column {
     flex: 1;
-    border: 1px dashed black;
+    border: 1px solid black;
     display: flex;
     flex-direction: column;
-    align-items: center;
     overflow: hidden;
 }
 
 .day-header {
     font-size: 1em;
     font-weight: 600;
+    height: 40px;
+    user-select: none;
+}
+
+.timetable-time {
+    margin: 0px;
+    padding: 0px;
+    height: 40px;
+    border-top: 1px dashed grey;
+    border-bottom: 1px dashed grey;
+    user-select: none;
+}
+
+.timetable-cell {
+    margin: 0px;
+    padding: 0px;
+    height: 40px;
+    border-top: 1px dashed grey;
+    border-bottom: 1px dashed grey;
+    user-select: none;
+}
+
+.timetable-cell:hover {
+    background-color: rgb(228, 255, 228);
+}
+
+.timetable-cell.selected {
+    background-color: green;
+}
+
+.timetable-cell.selected:hover {
+    background-color: green;
+}
+
+.checkbox-label {
+    display: block;
 }

@@ -41,6 +41,15 @@ class TutorAvailability(models.Model):
     friday_times = models.ManyToManyField(TimeSlot, related_name="friday")
     saturday_times = models.ManyToManyField(TimeSlot, related_name="saturday")
     sunday_times = models.ManyToManyField(TimeSlot, related_name="sunday")
+
+    times = {'monday': monday_times,
+             'tuesday': tuesday_times,
+             'wednesday': wednesday_times,
+             'thursday': thursday_times,
+             'friday': friday_times,
+             'saturday': saturday_times,
+             'sunday': sunday_times
+             }
     
     def __str__(self):
         return f"{self.tutor}'s availability"

@@ -6,8 +6,8 @@ from django.urls import reverse
 from django.http import JsonResponse
 from .models import *
 from django.conf import settings
-import os
 from django.contrib.staticfiles import finders
+from django.contrib import messages
 
 
 # Create your views here.
@@ -154,13 +154,9 @@ def dashboard(request):
         # Save the user instance
         try:
             user.save()
+            messages.success(request, 'Profile information updated successfully.')
         except IntegrityError:
-            return render(request, "Narwhal_Tutoring/dashboard.html", {
-
-                "message": "Username already taken.",
-                "subjects": subjects,
-                "times": times
-            })
+            messages.error(request, 'Username already taken.', extra_tags='danger')
 
         return HttpResponseRedirect(reverse("dashboard"))  # Redirect to the dashboard after successful submission
 
@@ -168,3 +164,25 @@ def dashboard(request):
         "subjects": subjects,
         "times": times
     })
+
+def submit_timetable(request):
+    if request.method == 'POST':
+        user = request.user
+        days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+
+        times = TimeSlot.objects.all()
+        available_times = []
+
+        for day in days:
+            for time in times:
+                if request.POST.get(f'{day}-{time}') == 'true':
+                    available_times.append(time.id)
+
+            print(f"{user.availability.times[day]}")
+            getattr(user.availability, f'{day}_times').set(available_times)
+            available_times = []
+        
+        user.save()
+
+        messages.success(request, 'Timetable updated successfully.')
+        return HttpResponseRedirect(reverse("dashboard"))
