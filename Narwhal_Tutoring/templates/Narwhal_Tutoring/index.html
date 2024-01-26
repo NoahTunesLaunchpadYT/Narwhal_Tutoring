@@ -4,8 +4,8 @@
 {% block body %}
     <section id="hero">
         <div id="hero-text">
-            <h1>99 ATAR Private</h1>
-            <h2>Tutoring in Perth</h2>
+            <h1>Private Tutoring in Perth</h1>
+            <h4>From tutors with 99 ATAR.</h4>
             <p>Find a tutor now!</p>
             <div>
                 <button type="button" class="btn btn-primary">Tutors</button>
@@ -39,7 +39,7 @@
             <i class="bi bi-coin" style="font-size: 4rem;"></i>
             <h4>Risk free</h4>
             <p>
-                No lock-in contracts, money back on cancellation. 7 day customer support.
+                No lock-in contracts, flexible cancellation policy, and 7 day customer support.
             </p>
         </div>
     </section>
@@ -61,7 +61,7 @@
                             </li>
                             <li>
                                 Subjects: 
-                                {% for subject in subjects %}
+                                {% for subject in tutor.subjects.all %}
                                     {{ subject }},
                                 {% endfor %}
                             </li>

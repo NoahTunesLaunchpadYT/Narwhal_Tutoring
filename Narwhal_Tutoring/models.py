@@ -11,10 +11,9 @@ class User(AbstractUser):
     tutor = models.BooleanField(default=False)
 
     # Tutors Only
-    address = models.CharField(max_length=100, null=True)
     mobile = models.CharField(max_length=15, null=True)
     suburb = models.CharField(max_length=100, null=True)
-    subjects = models.ManyToManyField(Subject, related_name="tutors")
+    subjects = models.ManyToManyField(Subject, related_name="tutors", blank=True)
     atar = models.DecimalField(max_digits=4, decimal_places=2, null=True)
     description = models.TextField(blank=True)
     university = models.CharField(max_length=100, null=True)

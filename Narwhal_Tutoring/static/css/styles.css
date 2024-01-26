@@ -67,7 +67,7 @@ div {
     justify-content: center;
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1200px) {
     #hero::before {
         content: "";
         position: absolute;
@@ -181,7 +181,7 @@ div {
 
 #tutor-grid .tutor {
     width: 250px;
-    height: 470px;
+    height: 500px;
     padding: 10px;
     margin: 10px;
     box-sizing: border-box;
@@ -211,13 +211,13 @@ div {
 }
 
 ul {
-    font-size: 15px;
+    font-size: 14px;
     margin-left: 15px;
     margin-bottom: 0px;
 }
 
 .tutor-info {
-    height: 150px;
+    height: 200px;
 }
 
 #call-to-action {

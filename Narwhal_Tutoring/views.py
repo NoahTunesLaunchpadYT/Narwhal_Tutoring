@@ -12,7 +12,7 @@ from django.contrib import messages
 
 # Create your views here.
 def index(request):
-    tutors = User.objects.all()
+    tutors = User.objects.filter(tutor=True)
 
     for tutor in tutors:
         username = tutor.username
@@ -101,7 +101,7 @@ def contact(request):
     return render(request, "Narwhal_Tutoring/contact.html")
 
 def tutors(request):
-    tutors = User.objects.all()
+    tutors = User.objects.filter(tutor=True)
     return render(request, "Narwhal_Tutoring/tutors.html", {
         "tutors": tutors
     })
@@ -128,7 +128,6 @@ def dashboard(request):
         # Extract form data from request.POST
         username = request.POST.get('username')
         email = request.POST.get('email')
-        address = request.POST.get('address')
         mobile = request.POST.get('mobile')
         atar = request.POST.get('atar')
         suburb = request.POST.get('suburb')
@@ -141,7 +140,6 @@ def dashboard(request):
         # Update the current user instance with the form data
         user.username = username
         user.email = email
-        user.address = address
         user.mobile = mobile
         user.atar = atar
         user.suburb = suburb
@@ -186,3 +184,17 @@ def submit_timetable(request):
 
         messages.success(request, 'Timetable updated successfully.')
         return HttpResponseRedirect(reverse("dashboard"))
+    
+def tutor(request, tutor_id):
+    times = TimeSlot.objects.all()
+    tutors = User.objects.filter(tutor=True)
+    
+    try:
+        tutor = tutors.get(id=tutor_id)
+        return render(request, "Narwhal_Tutoring/tutor.html", {
+            'tutor': tutor,
+            'times': times
+        })
+    except:
+        messages.error(request, f'{tutor_id} is not a tutor.', extra_tags='danger')
+        return render(request, "Narwhal_Tutoring/tutor.html")

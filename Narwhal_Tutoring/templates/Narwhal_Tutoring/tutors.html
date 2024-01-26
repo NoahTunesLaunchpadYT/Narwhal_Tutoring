@@ -19,7 +19,10 @@
                                 Suburb: {{ tutor.suburb }}
                             </li>
                             <li>
-                                Subjects: {{ tutor.Subjects.all }}
+                                Subjects: 
+                                {% for subject in tutor.subjects.all %}
+                                    {{ subject }},
+                                {% endfor %}
                             </li>
                         </ul>
                     </div>

@@ -1,0 +1,143 @@
+{% extends "Narwhal_Tutoring/layout.html" %}
+{% load static %}
+
+{% block body %}
+    <a class="navbar-brand" href="{% url 'index'%}"><img src="{% static 'images/text_logo.png' %}" alt="Example Image" class="logo"></a>
+    <section class="section-p1">
+        {% if messages %}
+        <div class="container mt-3">
+            {% for message in messages %}
+            <div class="alert {% if message.tags %} alert-{{ message.tags }}{% endif %}" role="alert">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        <h1 class="center-title">
+            {{ tutor.username }}
+        </h1>
+    </section>
+    <section class="contacts">
+        <div class="contact">
+            <img src="{% static 'images/' %}{{ tutor.pfp_url }}" alt="{{ tutor }}">
+            <div class="text-box">
+                <h3>{{ tutor }}</h3>
+            </div>
+        </div>
+        <div class="col-12">
+            <h3>Schedule</h3>
+            {% if tutor.available %}
+                {{ tutor }} is <strong>available</strong>.
+            {% else %}
+                {{ tutor }} is <strong>unavailable</strong>.
+            {% endif %}
+            <div class="timetable">
+                {% csrf_token %}
+                <div class="column">
+                    <h6 class="day-header">times</h6>
+                    {% for time in times %}
+                        <p class="timetable-time">{{ time }}</p>
+                    {% endfor %}
+                </div>
+                                        
+                <!-- Monday -->
+                <div class="column">
+                    <h6 class="day-header">Mon</h6>
+                    {% for time in times %}
+                        {% if time in tutor.availability.monday_times.all %}
+                            <div class="timetable-cell selected">
+                            </div>
+                        {% else %}
+                            <div class="timetable-cell">
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                <!-- Tuesday -->
+                <div class="column">
+                    <h6 class="day-header">Tue</h6>
+                    {% for time in times %}
+                        {% if time in tutor.availability.tuesday_times.all %}
+                            <div class="timetable-cell selected">
+                            </div>
+                        {% else %}
+                            <div class="timetable-cell">
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                <!-- Wednesday -->
+                <div class="column">
+                    <h6 class="day-header">Wed</h6>
+                    {% for time in times %}
+                        {% if time in tutor.availability.wednesday_times.all %}
+                            <div class="timetable-cell selected">
+                            </div>
+                        {% else %}
+                            <div class="timetable-cell">
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                <!-- Thursday -->
+                <div class="column">
+                    <h6 class="day-header">Thu</h6>
+                    {% for time in times %}
+                        {% if time in tutor.availability.thursday_times.all %}
+                            <div class="timetable-cell selected">
+                            </div>
+                        {% else %}
+                            <div class="timetable-cell">
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                <!-- Friday -->
+                <div class="column">
+                    <h6 class="day-header">Fri</h6>
+                    {% for time in times %}
+                        {% if time in tutor.availability.friday_times.all %}
+                            <div class="timetable-cell selected">
+                            </div>
+                        {% else %}
+                            <div class="timetable-cell">
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                <!-- Saturday -->
+                <div class="column">
+                    <h6 class="day-header">Sat</h6>
+                    {% for time in times %}
+                        {% if time in tutor.availability.saturday_times.all %}
+                            <div class="timetable-cell selected">
+                            </div>
+                        {% else %}
+                            <div class="timetable-cell">
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                <!-- Sunday -->
+                <div class="column">
+                    <h6 class="day-header">Sun</h6>
+                    {% for time in times %}
+                        {% if time in tutor.availability.sunday_times.all %}
+                            <div class="timetable-cell selected">
+                            </div>
+                        {% else %}
+                            <div class="timetable-cell">
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>                        
+        </div>
+    </section>
+{% endblock %}
