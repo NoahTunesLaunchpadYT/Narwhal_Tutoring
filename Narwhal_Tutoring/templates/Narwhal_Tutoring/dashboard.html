@@ -134,11 +134,11 @@
                                 <h6 class="day-header">Mon</h6>
                                 {% for time in times %}
                                     {% if time in user.availability.monday_times.all %}
-                                        <div class="timetable-cell selected">
+                                        <div class="dashboard-timetable-cell selected">
                                             <input type="hidden" class="timeslot" name="monday-{{ time }}" value="true">
                                         </div>
                                     {% else %}
-                                        <div class="timetable-cell">
+                                        <div class="dashboard-timetable-cell">
                                             <input type="hidden" class="timeslot" name="monday-{{ time }}" value="false">
                                         </div>
                                     {% endif %}
@@ -150,11 +150,11 @@
                                 <h6 class="day-header">Tue</h6>
                                 {% for time in times %}
                                     {% if time in user.availability.tuesday_times.all %}
-                                        <div class="timetable-cell selected">
+                                        <div class="dashboard-timetable-cell selected">
                                             <input type="hidden" class="timeslot" name="tuesday-{{ time }}" value="true">
                                         </div>
                                     {% else %}
-                                        <div class="timetable-cell">
+                                        <div class="dashboard-timetable-cell">
                                             <input type="hidden" class="timeslot" name="tuesday-{{ time }}" value="false">
                                         </div>
                                     {% endif %}
@@ -166,11 +166,11 @@
                                 <h6 class="day-header">Wed</h6>
                                 {% for time in times %}
                                     {% if time in user.availability.wednesday_times.all %}
-                                        <div class="timetable-cell selected">
+                                        <div class="dashboard-timetable-cell selected">
                                             <input type="hidden" class="timeslot" name="wednesday-{{ time }}" value="true">
                                         </div>
                                     {% else %}
-                                        <div class="timetable-cell">
+                                        <div class="dashboard-timetable-cell">
                                             <input type="hidden" class="timeslot" name="wednesday-{{ time }}" value="false">
                                         </div>
                                     {% endif %}
@@ -182,11 +182,11 @@
                                 <h6 class="day-header">Thu</h6>
                                 {% for time in times %}
                                     {% if time in user.availability.thursday_times.all %}
-                                        <div class="timetable-cell selected">
+                                        <div class="dashboard-timetable-cell selected">
                                             <input type="hidden" class="timeslot" name="thursday-{{ time }}" value="true">
                                         </div>
                                     {% else %}
-                                        <div class="timetable-cell">
+                                        <div class="dashboard-timetable-cell">
                                             <input type="hidden" class="timeslot" name="thursday-{{ time }}" value="false">
                                         </div>
                                     {% endif %}
@@ -198,11 +198,11 @@
                                 <h6 class="day-header">Fri</h6>
                                 {% for time in times %}
                                     {% if time in user.availability.friday_times.all %}
-                                        <div class="timetable-cell selected">
+                                        <div class="dashboard-timetable-cell selected">
                                             <input type="hidden" class="timeslot" name="friday-{{ time }}" value="true">
                                         </div>
                                     {% else %}
-                                        <div class="timetable-cell">
+                                        <div class="dashboard-timetable-cell">
                                             <input type="hidden" class="timeslot" name="friday-{{ time }}" value="false">
                                         </div>
                                     {% endif %}
@@ -214,11 +214,11 @@
                                 <h6 class="day-header">Sat</h6>
                                 {% for time in times %}
                                     {% if time in user.availability.saturday_times.all %}
-                                        <div class="timetable-cell selected">
+                                        <div class="dashboard-timetable-cell selected">
                                             <input type="hidden" class="timeslot" name="saturday-{{ time }}" value="true">
                                         </div>
                                     {% else %}
-                                        <div class="timetable-cell">
+                                        <div class="dashboard-timetable-cell">
                                             <input type="hidden" class="timeslot" name="saturday-{{ time }}" value="false">
                                         </div>
                                     {% endif %}
@@ -230,11 +230,11 @@
                                 <h6 class="day-header">Sun</h6>
                                 {% for time in times %}
                                     {% if time in user.availability.sunday_times.all %}
-                                        <div class="timetable-cell selected">
+                                        <div class="dashboard-timetable-cell selected">
                                             <input type="hidden" class="timeslot" name="sunday-{{ time }}" value="true">
                                         </div>
                                     {% else %}
-                                        <div class="timetable-cell">
+                                        <div class="dashboard-timetable-cell">
                                             <input type="hidden" class="timeslot" name="sunday-{{ time }}" value="false">
                                         </div>
                                     {% endif %}
@@ -258,5 +258,5 @@
 {% endblock %}
 
 {% block script %}
-    <script src="{% static 'javascript/dashboards.js' %}"></script>
+    <script src="{% static 'javascript/dashboard.js' %}"></script>
 {% endblock %}

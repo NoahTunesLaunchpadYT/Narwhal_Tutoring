@@ -14,7 +14,7 @@
         </div>
         {% endif %}
         <h1 class="center-title">
-            {{ tutor.username }}
+            Book lesson with {{ tutor.username }}
         </h1>
     </section>
     <section class="contacts">
@@ -22,122 +22,161 @@
             <img src="{% static 'images/' %}{{ tutor.pfp_url }}" alt="{{ tutor }}">
             <div class="text-box">
                 <h3>{{ tutor }}</h3>
+                <p>
+                    ATAR: {{ tutor.atar }} <br>
+                    Suburb: {{ tutor.suburb }} <br>
+                    Subjects: 
+                    {% for subject in tutor.subjects.all %}
+                        {{ subject }},
+                    {% endfor %}
+                    <br>
+                    <p>
+                        <i>
+                            "{{ tutor.description }}"
+                        </i>
+                    </p>
+                </p>
             </div>
         </div>
-        <div class="col-12">
-            <h3>Schedule</h3>
+
+        <div class="col-12 calendar-container">
+            <h3>Book a slot in {{ tutor }}'s timetable.</h3>
             {% if tutor.available %}
-                {{ tutor }} is <strong>available</strong>.
+                <form action="{% url 'tutor' tutor_id=tutor.id %}" method="post">
+                    <div class="timetable">
+                        {% csrf_token %}
+                        <div class="column">
+                            <h6 class="day-header">times</h6>
+                            {% for time in times %}
+                                <p class="timetable-time">{{ time }}</p>
+                            {% endfor %}
+                        </div>
+                                                
+                        <!-- Monday -->
+                        <div class="column">
+                            <h6 class="day-header">Mon</h6>
+                            {% for time in times %}
+                                <div class="timetable-cell {% if time in tutor.availability.monday_times.all %}available{% endif %}">
+                                    <input type="hidden" class="timeslot" name="monday-{{ time }}" value="true">
+                                </div>
+                            {% endfor %}
+                        </div>
+        
+                        <!-- Tuesday -->
+                        <div class="column">
+                            <h6 class="day-header">Tue</h6>
+                            {% for time in times %}
+                                <div class="timetable-cell {% if time in tutor.availability.tuesday_times.all %}available{% endif %}">
+                                    <input type="hidden" class="timeslot" name="tuesday-{{ time }}" value="true">
+                                </div>
+                            {% endfor %}
+                        </div>
+        
+                        <!-- Wednesday -->
+                        <div class="column">
+                            <h6 class="day-header">Wed</h6>
+                            {% for time in times %}
+                                <div class="timetable-cell {% if time in tutor.availability.wednesday_times.all %}available{% endif %}">
+                                    <input type="hidden" class="timeslot" name="wednesday-{{ time }}" value="true">
+                                </div>
+                            {% endfor %}
+                        </div>
+        
+                        <!-- Thursday -->
+                        <div class="column">
+                            <h6 class="day-header">Thu</h6>
+                            {% for time in times %}
+                                <div class="timetable-cell {% if time in tutor.availability.thursday_times.all %}available{% endif %}">
+                                    <input type="hidden" class="timeslot" name="thursday-{{ time }}" value="true">
+                                </div>
+                            {% endfor %}
+                        </div>
+        
+                        <!-- Friday -->
+                        <div class="column">
+                            <h6 class="day-header">Fri</h6>
+                            {% for time in times %}
+                                <div class="timetable-cell {% if time in tutor.availability.friday_times.all %}available{% endif %}">
+                                    <input type="hidden" class="timeslot" name="friday-{{ time }}" value="true">
+                                </div>
+                            {% endfor %}
+                        </div>
+        
+                        <!-- Saturday -->
+                        <div class="column">
+                            <h6 class="day-header">Sat</h6>
+                            {% for time in times %}
+                                <div class="timetable-cell {% if time in tutor.availability.saturday_times.all %}available{% endif %}">
+                                    <input type="hidden" class="timeslot" name="saturday-{{ time }}" value="true">
+                                </div>
+                            {% endfor %}
+                        </div>
+        
+                        <!-- Sunday -->
+                        <div class="column">
+                            <h6 class="day-header">Sun</h6>
+                            {% for time in times %}
+                                <div class="timetable-cell {% if time in tutor.availability.sunday_times.all %}available{% endif %}">
+                                    <input type="hidden" class="timeslot" name="sunday-{{ time }}" value="true">
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <h4>Selected Time(s) (UTC+8)</h4>
+                    <div class="booking-info">
+                        <div id="times-booked">
+                            You have not selected a time yet. 
+                        </div>
+                        <div id="pricing-info">
+                            <div class="price-tag" id="hr-1">
+                                <h4>
+                                    1hr per week.
+                                </h4>
+                                <h3>
+                                    $70/hr
+                                </h3>
+                            </div>
+                            <div class="price-tag" id="hr-2">
+                                <h4>
+                                    2hr per week.
+                                </h4>
+                                <h3>
+                                    $63/hr
+                                </h3>
+                            </div>
+                            <div class="price-tag" id="hr-3">
+                                <h4>
+                                    3hr per week.
+                                </h4>
+                                <h3>
+                                    $60/hr
+                                </h3>
+                            </div>
+                            <div class="price-tag" id="hr-4">
+                                <h4>
+                                    4+hr per week.
+                                </h4>
+                                <h3>
+                                    $58/hr
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="start-date">Start date:</label>
+                        <input type="date" id="start-date" name="start-date">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" value="1">Purchase 1 week of tutoring</button>
+                    <button type="submit" class="btn btn-primary" value="10">Purchase 10 weeks of tutoring</button>
+                </form>
             {% else %}
                 {{ tutor }} is <strong>unavailable</strong>.
             {% endif %}
-            <div class="timetable">
-                {% csrf_token %}
-                <div class="column">
-                    <h6 class="day-header">times</h6>
-                    {% for time in times %}
-                        <p class="timetable-time">{{ time }}</p>
-                    {% endfor %}
-                </div>
-                                        
-                <!-- Monday -->
-                <div class="column">
-                    <h6 class="day-header">Mon</h6>
-                    {% for time in times %}
-                        {% if time in tutor.availability.monday_times.all %}
-                            <div class="timetable-cell selected">
-                            </div>
-                        {% else %}
-                            <div class="timetable-cell">
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-
-                <!-- Tuesday -->
-                <div class="column">
-                    <h6 class="day-header">Tue</h6>
-                    {% for time in times %}
-                        {% if time in tutor.availability.tuesday_times.all %}
-                            <div class="timetable-cell selected">
-                            </div>
-                        {% else %}
-                            <div class="timetable-cell">
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-
-                <!-- Wednesday -->
-                <div class="column">
-                    <h6 class="day-header">Wed</h6>
-                    {% for time in times %}
-                        {% if time in tutor.availability.wednesday_times.all %}
-                            <div class="timetable-cell selected">
-                            </div>
-                        {% else %}
-                            <div class="timetable-cell">
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-
-                <!-- Thursday -->
-                <div class="column">
-                    <h6 class="day-header">Thu</h6>
-                    {% for time in times %}
-                        {% if time in tutor.availability.thursday_times.all %}
-                            <div class="timetable-cell selected">
-                            </div>
-                        {% else %}
-                            <div class="timetable-cell">
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-
-                <!-- Friday -->
-                <div class="column">
-                    <h6 class="day-header">Fri</h6>
-                    {% for time in times %}
-                        {% if time in tutor.availability.friday_times.all %}
-                            <div class="timetable-cell selected">
-                            </div>
-                        {% else %}
-                            <div class="timetable-cell">
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-
-                <!-- Saturday -->
-                <div class="column">
-                    <h6 class="day-header">Sat</h6>
-                    {% for time in times %}
-                        {% if time in tutor.availability.saturday_times.all %}
-                            <div class="timetable-cell selected">
-                            </div>
-                        {% else %}
-                            <div class="timetable-cell">
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-
-                <!-- Sunday -->
-                <div class="column">
-                    <h6 class="day-header">Sun</h6>
-                    {% for time in times %}
-                        {% if time in tutor.availability.sunday_times.all %}
-                            <div class="timetable-cell selected">
-                            </div>
-                        {% else %}
-                            <div class="timetable-cell">
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-            </div>                        
         </div>
     </section>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'javascript/tutors.js' %}"></script>
 {% endblock %}

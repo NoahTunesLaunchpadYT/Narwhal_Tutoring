@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
         activeTab.classList.add('show', 'active');
     }
 
-    var timetableCells = document.querySelectorAll('.timetable-cell');
+    var timetableCells = document.querySelectorAll('.dashboard-timetable-cell');
     var isDragging = false;
     var isSelecting = true;  // Initial state is selecting
     var selectedCells = [];

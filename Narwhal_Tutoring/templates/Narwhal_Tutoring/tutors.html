@@ -27,7 +27,9 @@
                         </ul>
                     </div>
                     <div class="d-flex justify-content-center">
-                        <button type="button" class="btn btn-primary">View Page</button>
+                        <a href="{% url 'tutor' tutor_id=tutor.id %}">
+                            <button type="button" class="btn btn-primary">View Page</button>
+                        </a>
                     </div>
                 </div>
             {% endfor %}
