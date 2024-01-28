@@ -6,7 +6,7 @@
             <div class="alert alert-warning" role="alert">{{ message }}</div>
         {% endif %}
         <h2>Login</h2>
-        <form action="{% url 'login' %}" method="post">
+        <form method="post" action="{% url 'login' %}?next={{ request.GET.next }}">
             {% csrf_token %}
             <div class="form-group">
                 <input autofocus class="form-control" type="text" name="username" placeholder="Username" autocomplete>
@@ -16,8 +16,6 @@
             </div>
             <input class="btn btn-primary" type="submit" value="Login">
         </form>
+        Don't have an account? <a href="{% url 'register' %}?next={{ request.GET.next }}">Register here.</a>
     </section>
-
-    Don't have an account? <a href="{% url 'register' %}">Register here.</a>
-
 {% endblock %}

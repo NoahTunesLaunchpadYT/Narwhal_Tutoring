@@ -157,7 +157,7 @@ div {
 
 #login {
     background-image: url("../images/hero.png");
-    height: 100vh;
+    min-height: 100vh;
     width: 100%;
     background-size: cover;
     background-position: top 25% right 0;
@@ -176,14 +176,14 @@ div {
 #tutor-grid {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between; 
+    justify-content: center; 
 }
 
 #tutor-grid .tutor {
     width: 250px;
     height: 500px;
     padding: 10px;
-    margin: 10px;
+    margin: 20px;
     box-sizing: border-box;
     border: 1px solid #ccc;
     border-radius: 30px;
@@ -507,11 +507,11 @@ font-weight: 300;
 }
 
 .timetable-cell.available {
-    background-color: white;
+    background-color: rgb(228, 255, 228);
 }
 
 .timetable-cell.available:hover {
-    background-color: rgb(228, 255, 228);
+    background-color: rgb(163, 255, 163);
 }
 
 .timetable-cell.selected {
@@ -525,12 +525,17 @@ font-weight: 300;
 #times-booked {
     margin: 10px;
     min-width: 200px;
+    min-height: 300px;
 }
 
 .booking-info {
     display: flex;
     flex-direction: row;
-    justify-content: space-between; 
+    justify-content: space-between;
+}
+
+#times-booked {
+    margin: 10px;
 }
 
 #pricing-info {
@@ -551,4 +556,13 @@ font-weight: 300;
 
 .price-tag:hover {
     box-shadow: 10px 10px 70px rgba(70, 62, 221, 0.12);
+}
+
+/* tutors section */
+
+.subject-filter {
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 20px;
 }

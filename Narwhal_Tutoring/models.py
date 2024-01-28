@@ -3,11 +3,19 @@ from django.db import models
 
 class Subject(models.Model):
     name = models.CharField(max_length=100)
+    # Either Primary School, Highschool, or ATAR
+    type = models.CharField(max_length=20)
 
     def __str__(self):
         return f"{self.name}"
 
 class User(AbstractUser):
+
+    student1_name = models.CharField(max_length=100, null=True)
+    student2_name = models.CharField(max_length=100, null=True)
+    student3_name = models.CharField(max_length=100, null=True)
+    address = models.CharField(max_length=200, null=True)
+
     tutor = models.BooleanField(default=False)
 
     # Tutors Only

@@ -2,12 +2,59 @@
 {% load static %}
 
 {% block body %}
-    <a class="navbar-brand" href="{% url 'index'%}"><img src="{% static 'images/text_logo.png' %}" alt="Example Image" class="logo"></a>
+    <a class="navbar-brand" href="{% url 'index'%}">
+        <img src="{% static 'images/text_logo.png' %}" alt="Example Image" class="logo">
+    </a>
     <section id="featured-tutors" class="section-p1">
         <h1 class="center-title">Featured Tutors</h1>
+
+        <!-- Subject Filter -->
+        <div class="subject-filter container">
+            <label class="mb-3 d-block">Subject Filter:</label>
+
+            <!-- Bootstrap Grid System -->
+            <div class="row">
+                <!-- Primary School -->
+                <div class="col-md-4">
+                    <h4>Primary School Subjects</h4>
+                    {% for subject in primary_school_subjects %}
+                        <div class="form-check mb-2">
+                            <input type="checkbox" class="form-check-input" id="subject-{{ subject.id }}" name="subjects" value="{{ subject }}">
+                            <label class="form-check-label" for="subject-{{ subject.id }}">{{ subject.name }}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <!-- High School -->
+                <div class="col-md-4">
+                    <h4>High School Subjects</h4>
+                    {% for subject in high_school_subjects %}
+                        <div class="form-check mb-2">
+                            <input type="checkbox" class="form-check-input" id="subject-{{ subject.id }}" name="subjects" value="{{ subject }}">
+                            <label class="form-check-label" for="subject-{{ subject.id }}">{{ subject.name }}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <!-- ATAR -->
+                <div class="col-md-4">
+                    <h4>ATAR subjects</h4>
+                    {% for subject in atar_subjects %}
+                        <div class="form-check mb-2">
+                            <input type="checkbox" class="form-check-input" id="subject-{{ subject.id }}" name="subjects" value="{{ subject }}">
+                            <label class="form-check-label" for="subject-{{ subject.id }}">{{ subject.name }}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Tutor Grid -->
         <div id="tutor-grid">
             {% for tutor in tutors %}
-                <div class="tutor">
+                {% if tutor.available %}
+                <div class="tutor" data-subjects="{% for subject in tutor.subjects.all %}{{ subject.name }}, {% endfor %}">
+                    <!-- Tutor card content -->
                     <img class="pfp-large" src="{% static 'images/' %}{{ tutor.pfp_url }}" alt="{{ tutor.username }}'s Image">
                     <div class="tutor-info">
                         <h4 class="tutor-name">{{ tutor.username }}</h4>
@@ -31,8 +78,13 @@
                             <button type="button" class="btn btn-primary">View Page</button>
                         </a>
                     </div>
-                </div>
+                </div>       
+                {% endif %}     
             {% endfor %}
         </div>
     </section>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'javascript/tutors.js' %}"></script>
 {% endblock %}

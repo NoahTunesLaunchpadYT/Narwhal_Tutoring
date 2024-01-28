@@ -37,20 +37,22 @@
                         {% csrf_token %}
 
                         <p>Hit the "Submit" button at the bottom to save changes</p>
-                        
-                        <!-- Available -->
-                        <div class="mb-3 form-check">
-                            <input type="checkbox" class="form-check-input" id="available" name="available" {% if user.available %}checked{% endif %}>
-                            <label class="form-check-label" for="available">Available</label>
-                        </div>
+
+                        {% if user.tutor %}
+                            <!-- Available -->
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="available" name="available" {% if user.available %}checked{% endif %}>
+                                <label class="form-check-label" for="available">Available</label>
+                            </div>
+                            <p>
+                                (Only tutors who are "available" can gain new clients.)
+                            </p>
+                        {% endif %}
                     
-                        <p>
-                            (Only tutors who are "available" can gain new clients.)
-                        </p>
                     
-                        <!-- Username (name clients see) -->
+                        <!-- Username -->
                         <div class="mb-3">
-                            <label for="username" class="form-label">Username (name clients see)</label>
+                            <label for="username" class="form-label">Username</label>
                             <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}" required>
                         </div>
                         
@@ -66,184 +68,213 @@
                             <input type="tel" class="form-control" id="mobile" name="mobile" pattern="[0-9]{10}" placeholder="e.g., 0455555555" value="{{ user.mobile }}" required>
                             <small class="form-text text-muted">Please enter your mobile number (10 digits).</small>
                         </div>
-                        
-                        <!-- ATAR -->
-                        <div class="mb-3">
-                            <label for="atar" class="form-label">ATAR</label>
-                            <input type="number" class="form-control" id="atar" name="atar" step="0.01" value="{{ user.atar }}" required>
-                        </div>
-                        
-                        <!-- Suburb -->
-                        <div class="mb-3">
-                            <label for="suburb" class="form-label">Suburb</label>
-                            <input type="text" class="form-control" id="suburb" name="suburb" value="{{ user.suburb }}" required>
-                        </div>
-                        
-                        <!-- Subjects (Multiselect) -->
-                        <div class="form-group">
-                            <label>Subjects (check to select multiple)</label>
-                            {% for subject in subjects %}
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="subject_{{ subject.id }}" name="subjects" value="{{ subject.id }}" {% if subject in user.subjects.all %}checked{% endif %}>
-                                    <label class="form-check-label" for="subject_{{ subject.id }}">{{ subject.name }}</label>
-                                </div>
-                            {% endfor %}
-                        </div>  
-                        
-                        <!-- Description -->
-                        <div class="mb-3">
-                            <label for="description" class="form-label">Description</label>
-                            <textarea class="form-control" id="description" name="description" rows="5" maxlength="1000" required>{{ user.description }}</textarea>
-                        </div>
-                        
-                        <!-- University (Optional) -->
-                        <div class="mb-3">
-                            <label for="university" class="form-label">University (optional)</label>
-                            <input type="text" class="form-control" id="university" name="university" value="{{ user.university }}">
-                        </div>
-                        
-                        <!-- Degree (Optional) -->
-                        <div class="mb-3">
-                            <label for="degree" class="form-label">Degree (optional)</label>
-                            <input type="text" class="form-control" id="degree" name="degree" value="{{ user.degree }}">
-                        </div>
+
+                        {% if user.tutor %}
+                            <!-- ATAR -->
+                            <div class="mb-3">
+                                <label for="atar" class="form-label">ATAR</label>
+                                <input type="number" class="form-control" id="atar" name="atar" step="0.01" value="{{ user.atar }}" required>
+                            </div>
+                            
+                            <!-- Suburb -->
+                            <div class="mb-3">
+                                <label for="suburb" class="form-label">Suburb</label>
+                                <input type="text" class="form-control" id="suburb" name="suburb" value="{{ user.suburb }}" required>
+                            </div>
+
+                            <!-- Subjects (Multiselect) -->
+                            <div class="form-group">
+                                <label>Subjects (check to select multiple)</label>
+                                {% for subject in subjects %}
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="subject_{{ subject.id }}" name="subjects" value="{{ subject.id }}" {% if subject in user.subjects.all %}checked{% endif %}>
+                                        <label class="form-check-label" for="subject_{{ subject.id }}">{{ subject.name }}</label>
+                                    </div>
+                                {% endfor %}
+                            </div>  
+                            
+                            <!-- Description -->
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea class="form-control" id="description" name="description" rows="5" maxlength="1000" required>{{ user.description }}</textarea>
+                            </div>
+                            
+                            <!-- University (Optional) -->
+                            <div class="mb-3">
+                                <label for="university" class="form-label">University (optional)</label>
+                                <input type="text" class="form-control" id="university" name="university" value="{{ user.university }}">
+                            </div>
+                            
+                            <!-- Degree (Optional) -->
+                            <div class="mb-3">
+                                <label for="degree" class="form-label">Degree (optional)</label>
+                                <input type="text" class="form-control" id="degree" name="degree" value="{{ user.degree }}">
+                            </div>
+                        {% else %}
+                            <!-- Address -->
+                            <div class="mb-3">
+                                <label for="address" class="form-label">Address</label>
+                                <input type="text" class="form-control" id="address" name="address" value="{{ user.address }}">
+                            </div>
+
+                            <!-- Student 1 -->
+                            <div class="mb-3">
+                                <label for="student1_name" class="form-label">Student 1 name</label>
+                                <input type="text" class="form-control" id="student1_name" name="student1_name" value="{{ user.student1_name }}">
+                            </div>
+
+                            <!-- Student 2 -->
+                            <div class="mb-3">
+                                <label for="student2_name" class="form-label">Student 2 name</label>
+                                <input type="text" class="form-control" id="student2_name" name="student2_name" value="{{ user.student2_name }}">
+                            </div>
+
+                            <!-- Student 3 -->
+                            <div class="mb-3">
+                                <label for="student3_name" class="form-label">Student 3 name</label>
+                                <input type="text" class="form-control" id="student3_name" name="student3_name" value="{{ user.student3_name }}">
+                            </div>
+                        {% endif %}
                         
                         <!-- Submit Button -->
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>                                             
                 </div>
                 <div class="tab-pane fade" id="list-schedule" role="tabpanel" aria-labelledby="list-schedule-list">
-                    <h3>Schedule</h3>
-                    {% if user.available %}
-                        You are listed as <strong>available</strong>.
+                    {% if user.tutor %}
+                        <h3>Semester 1 availabilities</h3>
+                        {% if user.available %}
+                            You are listed as <strong>available</strong>.
+                            <form action="{% url 'submit-timetable' %}#list-schedule" method="post">
+                                <div class="timetable">
+                                    {% csrf_token %}
+                                    <div class="column">
+                                        <h6 class="day-header">times</h6>
+                                        {% for time in times %}
+                                            <p class="timetable-time">{{ time }}</p>
+                                        {% endfor %}
+                                    </div>
+                                                            
+                                    <!-- Monday -->
+                                    <div class="column">
+                                        <h6 class="day-header">Mon</h6>
+                                        {% for time in times %}
+                                            {% if time in user.availability.monday_times.all %}
+                                                <div class="dashboard-timetable-cell selected">
+                                                    <input type="hidden" class="timeslot" name="monday-{{ time }}" value="true">
+                                                </div>
+                                            {% else %}
+                                                <div class="dashboard-timetable-cell">
+                                                    <input type="hidden" class="timeslot" name="monday-{{ time }}" value="false">
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+    
+                                    <!-- Tuesday -->
+                                    <div class="column">
+                                        <h6 class="day-header">Tue</h6>
+                                        {% for time in times %}
+                                            {% if time in user.availability.tuesday_times.all %}
+                                                <div class="dashboard-timetable-cell selected">
+                                                    <input type="hidden" class="timeslot" name="tuesday-{{ time }}" value="true">
+                                                </div>
+                                            {% else %}
+                                                <div class="dashboard-timetable-cell">
+                                                    <input type="hidden" class="timeslot" name="tuesday-{{ time }}" value="false">
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+    
+                                    <!-- Wednesday -->
+                                    <div class="column">
+                                        <h6 class="day-header">Wed</h6>
+                                        {% for time in times %}
+                                            {% if time in user.availability.wednesday_times.all %}
+                                                <div class="dashboard-timetable-cell selected">
+                                                    <input type="hidden" class="timeslot" name="wednesday-{{ time }}" value="true">
+                                                </div>
+                                            {% else %}
+                                                <div class="dashboard-timetable-cell">
+                                                    <input type="hidden" class="timeslot" name="wednesday-{{ time }}" value="false">
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+    
+                                    <!-- Thursday -->
+                                    <div class="column">
+                                        <h6 class="day-header">Thu</h6>
+                                        {% for time in times %}
+                                            {% if time in user.availability.thursday_times.all %}
+                                                <div class="dashboard-timetable-cell selected">
+                                                    <input type="hidden" class="timeslot" name="thursday-{{ time }}" value="true">
+                                                </div>
+                                            {% else %}
+                                                <div class="dashboard-timetable-cell">
+                                                    <input type="hidden" class="timeslot" name="thursday-{{ time }}" value="false">
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+    
+                                    <!-- Friday -->
+                                    <div class="column">
+                                        <h6 class="day-header">Fri</h6>
+                                        {% for time in times %}
+                                            {% if time in user.availability.friday_times.all %}
+                                                <div class="dashboard-timetable-cell selected">
+                                                    <input type="hidden" class="timeslot" name="friday-{{ time }}" value="true">
+                                                </div>
+                                            {% else %}
+                                                <div class="dashboard-timetable-cell">
+                                                    <input type="hidden" class="timeslot" name="friday-{{ time }}" value="false">
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+    
+                                    <!-- Saturday -->
+                                    <div class="column">
+                                        <h6 class="day-header">Sat</h6>
+                                        {% for time in times %}
+                                            {% if time in user.availability.saturday_times.all %}
+                                                <div class="dashboard-timetable-cell selected">
+                                                    <input type="hidden" class="timeslot" name="saturday-{{ time }}" value="true">
+                                                </div>
+                                            {% else %}
+                                                <div class="dashboard-timetable-cell">
+                                                    <input type="hidden" class="timeslot" name="saturday-{{ time }}" value="false">
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+    
+                                    <!-- Sunday -->
+                                    <div class="column">
+                                        <h6 class="day-header">Sun</h6>
+                                        {% for time in times %}
+                                            {% if time in user.availability.sunday_times.all %}
+                                                <div class="dashboard-timetable-cell selected">
+                                                    <input type="hidden" class="timeslot" name="sunday-{{ time }}" value="true">
+                                                </div>
+                                            {% else %}
+                                                <div class="dashboard-timetable-cell">
+                                                    <input type="hidden" class="timeslot" name="sunday-{{ time }}" value="false">
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>                        
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </form>
+                        {% else %}
+                            You are listed as <strong>unavailable</strong>. Got to profile, check "Available" and hit "Submit" to be listed as available.
+                        {% endif %}
                     {% else %}
-                        You are listed as <strong>unavailable</strong>. Change this in "Profile".
+                        <h3>Schedule</h3>
                     {% endif %}
-                    <form action="{% url 'submit-timetable' %}#list-schedule" method="post">
-                        <div class="timetable">
-                            {% csrf_token %}
-                            <div class="column">
-                                <h6 class="day-header">times</h6>
-                                {% for time in times %}
-                                    <p class="timetable-time">{{ time }}</p>
-                                {% endfor %}
-                            </div>
-                                                    
-                            <!-- Monday -->
-                            <div class="column">
-                                <h6 class="day-header">Mon</h6>
-                                {% for time in times %}
-                                    {% if time in user.availability.monday_times.all %}
-                                        <div class="dashboard-timetable-cell selected">
-                                            <input type="hidden" class="timeslot" name="monday-{{ time }}" value="true">
-                                        </div>
-                                    {% else %}
-                                        <div class="dashboard-timetable-cell">
-                                            <input type="hidden" class="timeslot" name="monday-{{ time }}" value="false">
-                                        </div>
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
-
-                            <!-- Tuesday -->
-                            <div class="column">
-                                <h6 class="day-header">Tue</h6>
-                                {% for time in times %}
-                                    {% if time in user.availability.tuesday_times.all %}
-                                        <div class="dashboard-timetable-cell selected">
-                                            <input type="hidden" class="timeslot" name="tuesday-{{ time }}" value="true">
-                                        </div>
-                                    {% else %}
-                                        <div class="dashboard-timetable-cell">
-                                            <input type="hidden" class="timeslot" name="tuesday-{{ time }}" value="false">
-                                        </div>
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
-
-                            <!-- Wednesday -->
-                            <div class="column">
-                                <h6 class="day-header">Wed</h6>
-                                {% for time in times %}
-                                    {% if time in user.availability.wednesday_times.all %}
-                                        <div class="dashboard-timetable-cell selected">
-                                            <input type="hidden" class="timeslot" name="wednesday-{{ time }}" value="true">
-                                        </div>
-                                    {% else %}
-                                        <div class="dashboard-timetable-cell">
-                                            <input type="hidden" class="timeslot" name="wednesday-{{ time }}" value="false">
-                                        </div>
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
-
-                            <!-- Thursday -->
-                            <div class="column">
-                                <h6 class="day-header">Thu</h6>
-                                {% for time in times %}
-                                    {% if time in user.availability.thursday_times.all %}
-                                        <div class="dashboard-timetable-cell selected">
-                                            <input type="hidden" class="timeslot" name="thursday-{{ time }}" value="true">
-                                        </div>
-                                    {% else %}
-                                        <div class="dashboard-timetable-cell">
-                                            <input type="hidden" class="timeslot" name="thursday-{{ time }}" value="false">
-                                        </div>
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
-
-                            <!-- Friday -->
-                            <div class="column">
-                                <h6 class="day-header">Fri</h6>
-                                {% for time in times %}
-                                    {% if time in user.availability.friday_times.all %}
-                                        <div class="dashboard-timetable-cell selected">
-                                            <input type="hidden" class="timeslot" name="friday-{{ time }}" value="true">
-                                        </div>
-                                    {% else %}
-                                        <div class="dashboard-timetable-cell">
-                                            <input type="hidden" class="timeslot" name="friday-{{ time }}" value="false">
-                                        </div>
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
-
-                            <!-- Saturday -->
-                            <div class="column">
-                                <h6 class="day-header">Sat</h6>
-                                {% for time in times %}
-                                    {% if time in user.availability.saturday_times.all %}
-                                        <div class="dashboard-timetable-cell selected">
-                                            <input type="hidden" class="timeslot" name="saturday-{{ time }}" value="true">
-                                        </div>
-                                    {% else %}
-                                        <div class="dashboard-timetable-cell">
-                                            <input type="hidden" class="timeslot" name="saturday-{{ time }}" value="false">
-                                        </div>
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
-
-                            <!-- Sunday -->
-                            <div class="column">
-                                <h6 class="day-header">Sun</h6>
-                                {% for time in times %}
-                                    {% if time in user.availability.sunday_times.all %}
-                                        <div class="dashboard-timetable-cell selected">
-                                            <input type="hidden" class="timeslot" name="sunday-{{ time }}" value="true">
-                                        </div>
-                                    {% else %}
-                                        <div class="dashboard-timetable-cell">
-                                            <input type="hidden" class="timeslot" name="sunday-{{ time }}" value="false">
-                                        </div>
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
-                        
-                        </div>                        
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </form>
                 </div>
                 <div class="tab-pane fade" id="list-log" role="tabpanel" aria-labelledby="list-log-list">
                     <h3>Lesson Log</h3>

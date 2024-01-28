@@ -28,7 +28,8 @@
                     Subjects: 
                     {% for subject in tutor.subjects.all %}
                         {{ subject }},
-                    {% endfor %}
+                    {% endfor %} <br>
+                    Online or in person.
                     <br>
                     <p>
                         <i>
@@ -41,8 +42,19 @@
 
         <div class="col-12 calendar-container">
             <h3>Book a slot in {{ tutor }}'s timetable.</h3>
+            {% if user.is_authenticated %}
+            {% else %}
+                <h4>You are not currently logged in.
+                    <a href="{% url 'login' %}?next={{ request.path }}">Log In</a>
+                    or
+                    <a href="{% url 'register' %}?next={{ request.path }}">Register</a>
+                    to book your lesson.
+                </h4>
+                    
+            {% endif %}
+
             {% if tutor.available %}
-                <form action="{% url 'tutor' tutor_id=tutor.id %}" method="post">
+                <form action="{{ request.path }}" method="post">
                     <div class="timetable">
                         {% csrf_token %}
                         <div class="column">
@@ -122,11 +134,34 @@
                             {% endfor %}
                         </div>
                     </div>
-                    <h4>Selected Time(s) (UTC+8)</h4>
                     <div class="booking-info">
-                        <div id="times-booked">
-                            You have not selected a time yet. 
-                        </div>
+                        {% if user.is_authenticated %}
+                            <div>
+                                <div id="times-booked">
+                                    You have not selected a time yet. 
+                                </div>
+                                <div>
+                                    <label for="start-date">Start date:</label>
+                                    <input type="date" id="start-date" name="start-date">
+                                </div>
+                                <p>
+                                    Exact lessons times to be confirmed with the tutor. <br>
+                                    No travel fees within {{ 10 }}km from {{ tutor.suburb }}.
+                                </p>
+                                <button type="submit" class="btn btn-primary" value="1">Purchase 1 week of tutoring</button>
+                                <button type="submit" class="btn btn-primary" value="5">Purchase 5 weeks of tutoring</button>
+                                <button type="submit" class="btn btn-primary" value="10">Purchase 10 weeks of tutoring</button>
+                            </div>
+                        {% else %}
+                            <div>
+                                <h4>You are not currently logged in.
+                                    <a href="{% url 'login' %}?next={{ request.path }}">Log In</a>
+                                    or
+                                    <a href="{% url 'register' %}?next={{ request.path }}">Register</a>
+                                    to book your lesson.
+                                </h4>
+                            </div>
+                        {% endif %}
                         <div id="pricing-info">
                             <div class="price-tag" id="hr-1">
                                 <h4>
@@ -162,13 +197,6 @@
                             </div>
                         </div>
                     </div>
-                    <div>
-                        <label for="start-date">Start date:</label>
-                        <input type="date" id="start-date" name="start-date">
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary" value="1">Purchase 1 week of tutoring</button>
-                    <button type="submit" class="btn btn-primary" value="10">Purchase 10 weeks of tutoring</button>
                 </form>
             {% else %}
                 {{ tutor }} is <strong>unavailable</strong>.
@@ -178,5 +206,5 @@
 {% endblock %}
 
 {% block script %}
-    <script src="{% static 'javascript/tutors.js' %}"></script>
+    <script src="{% static 'javascript/tutor.js' %}"></script>
 {% endblock %}
