@@ -7,7 +7,7 @@ class Subject(models.Model):
     type = models.CharField(max_length=20)
 
     def __str__(self):
-        return f"{type self.name}"
+        return f"{self.type self.name}"
 
 class User(AbstractUser):
 
