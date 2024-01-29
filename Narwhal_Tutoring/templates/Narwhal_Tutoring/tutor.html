@@ -27,15 +27,16 @@
                     Suburb: {{ tutor.suburb }} <br>
                     Subjects: 
                     {% for subject in tutor.subjects.all %}
-                        {{ subject }},
+                        {{ subject.name }},
                     {% endfor %} <br>
+                    {% if tutor.university %}
+                        {{ tutor.university }}
+                    {% endif %}
                     Online or in person.
                     <br>
-                    <p>
-                        <i>
-                            "{{ tutor.description }}"
-                        </i>
-                    </p>
+                    <i>
+                        "{{ tutor.description }}"
+                    </i>
                 </p>
             </div>
         </div>

@@ -7,27 +7,27 @@ class Subject(models.Model):
     type = models.CharField(max_length=20)
 
     def __str__(self):
-        return f"{self.name}"
+        return f"{type self.name}"
 
 class User(AbstractUser):
 
-    student1_name = models.CharField(max_length=100, null=True)
-    student2_name = models.CharField(max_length=100, null=True)
-    student3_name = models.CharField(max_length=100, null=True)
-    address = models.CharField(max_length=200, null=True)
+    student1_name = models.CharField(max_length=100, null=True, blank=True)
+    student2_name = models.CharField(max_length=100, null=True, blank=True)
+    student3_name = models.CharField(max_length=100, null=True, blank=True)
+    address = models.CharField(max_length=200, null=True, blank=True)
 
     tutor = models.BooleanField(default=False)
 
     # Tutors Only
-    mobile = models.CharField(max_length=15, null=True)
-    suburb = models.CharField(max_length=100, null=True)
+    mobile = models.CharField(max_length=15, null=True, blank=True)
+    suburb = models.CharField(max_length=100, null=True, blank=True)
     subjects = models.ManyToManyField(Subject, related_name="tutors", blank=True)
-    atar = models.DecimalField(max_digits=4, decimal_places=2, null=True)
+    atar = models.DecimalField(max_digits=4, decimal_places=2, null=True, blank=True)
     description = models.TextField(blank=True)
-    university = models.CharField(max_length=100, null=True)
-    degree = models.CharField(max_length=100, null=True)
-    available = models.BooleanField(default=True)
-    pfp_url = models.CharField(max_length=100, null=True)
+    university = models.CharField(max_length=100, null=True, blank=True)
+    degree = models.CharField(max_length=100, null=True, blank=True)
+    available = models.BooleanField(default=True, blank=True)
+    pfp_url = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
         return f"{self.username}"
