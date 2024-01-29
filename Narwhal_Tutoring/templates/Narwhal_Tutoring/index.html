@@ -8,8 +8,12 @@
             <h4>From tutors with ~99 ATAR.</h4>
             <p>Find a tutor now!</p>
             <div>
-                <button type="button" class="btn btn-primary">Tutors</button>
-                <button type="button" class="btn btn-secondary">About Us</button>
+                <a href="{% url 'tutors' %}">
+                    <button type="button" class="btn btn-primary">Tutors</button>
+                </a>
+                <a href="{% url 'about' %}">
+                    <button type="button" class="btn btn-primary">About Us</button>
+                </a>
             </div>
         </div>
     </section>
@@ -40,6 +44,38 @@
             <h4>Risk free</h4>
             <p>
                 No lock-in contracts, flexible cancellation policy, and 7 day customer support.
+            </p>
+        </div>
+    </section>
+
+    <section id="steps" class="section-p1">
+        <h2>How to Book a Lesson</h2>
+        <div class="step-box">
+            <h3>1.</h3>
+            <h4>Find a tutor.</h4>
+            <p>
+                <a href="{% url 'tutors' %}">Find an available tutor</a> in a nearby suburb that tutors the subjects you need.
+            </p>
+        </div>
+        <div class="step-box">
+            <h3>2.</h3>
+            <h4>Book your lessons.</h4>
+            <p>
+                Find a timeslot in the tutor's schedule where weekly lessons can take place and select your starting date. 
+            </p>
+        </div>
+        <div class="step-box">
+            <h3>3.</h3>
+            <h4>Pay.</h4>
+            <p>
+                Pay for your lessons to confirm the booking. 
+            </p>
+        </div>
+        <div class="step-box">
+            <h3>4.</h3>
+            <h4>Contact your tutor.</h4>
+            <p>
+                After paying, reach out to your tutor to confirm the time and day of your first lesson, and ask any questions you may have about the lessons. 
             </p>
         </div>
     </section>
