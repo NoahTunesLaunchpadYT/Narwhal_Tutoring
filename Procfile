@@ -1,1 +1,1 @@
-web: gunicorn Narwhal_Tutoring.wsgi
+web: gunicorn projectname.wsgi
