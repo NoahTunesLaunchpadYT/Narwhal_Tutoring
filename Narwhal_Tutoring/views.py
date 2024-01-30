@@ -9,6 +9,9 @@ from .models import *
 from django.conf import settings
 from django.contrib.staticfiles import finders
 from django.contrib import messages
+import json
+from django.utils.timezone import make_aware
+from datetime import datetime
 
 
 # Create your views here.
@@ -235,3 +238,75 @@ def tutor(request, tutor_id):
     except:
         messages.error(request, f'{tutor_id} is not a tutor.', extra_tags='danger')
         return render(request, "Narwhal_Tutoring/tutor.html")
+
+def save_availability(request):
+    if request.method == 'POST':
+        print("Posted")
+        try:
+            data = json.loads(request.body)
+            
+            # Extracting data from the request
+            title = data.get('title', 'Availability')  # Default title if not provided
+            start_time_str = data.get('start')
+            end_time_str = data.get('end')
+
+            start_time = datetime.strptime(start_time_str, '%Y-%m-%dT%H:%M:%S.%fZ')
+            end_time = datetime.strptime(end_time_str, '%Y-%m-%dT%H:%M:%S.%fZ')
+            group_id = data.get('groupId', '0')  # Default group_id if not provided
+            event_id = data.get('id', '0')
+            
+            # Assuming the logged-in user is the tutor
+            tutor = request.user
+            
+            # Create and save the Availability instance
+            availability = Availability.objects.create(
+                tutor=tutor,
+                title=title,
+                start_time=start_time,
+                end_time=end_time,
+                group_id=group_id,
+                event_id=event_id,
+            )
+
+            print(f'Start Time: {start_time}')
+            print(f'End Time: {end_time}')
+            
+            return JsonResponse({'message': 'Event saved successfully'}, status=200)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+
+def delete_availability(request, event_id):
+    if request.method == 'DELETE':
+        availability = Availability.objects.get(event_id=event_id)
+
+        # Check if the tutor deleting the availability is the owner of the availability
+        if availability.tutor == request.user:
+            availability.delete()
+            return JsonResponse({'status': 'success'})
+        else:
+            return JsonResponse({'status': 'error', 'message': 'Permission denied'}, status=403)
+
+def get_availability(request):
+    if request.method == 'GET':
+        # Assuming the logged-in user is the tutor
+        tutor = request.user
+
+        # Fetch availability events for the tutor
+        availability_events = Availability.objects.filter(tutor=tutor)
+
+        # Convert events to a format suitable for FullCalendar
+        events = []
+        for availability in availability_events:
+            events.append({
+                'id': availability.event_id,
+                'title': availability.title,
+                'start': availability.start_time.isoformat(),
+                'end': availability.end_time.isoformat(),
+                'groupId': availability.group_id,
+                'editable': True
+            })
+            print(availability.group_id)
+            print(f'Start Time: {availability.start_time.isoformat()}')
+            print(f'End Time: {availability.end_time.isoformat()}')
+
+        return JsonResponse(events, safe=False)

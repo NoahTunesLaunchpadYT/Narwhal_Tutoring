@@ -14,7 +14,10 @@ urlpatterns = [
     path("tos", views.tos, name="tos"),
     path("dashboard", views.dashboard, name="dashboard"),
     path("submit-timetable", views.submit_timetable, name="submit-timetable"),
-    path("tutor/<int:tutor_id>", views.tutor, name='tutor')
+    path("tutor/<int:tutor_id>", views.tutor, name='tutor'),
+    path('save_availability/', views.save_availability, name='save_availability'),
+    path('delete_availability/<int:event_id>/', views.delete_availability, name='delete_availability'),
+    path('get_availability/', views.get_availability, name='get_availability')
 ]
 
 if settings.DEBUG:

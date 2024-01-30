@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-+vn$p(dyj2uwd%ow=4zkewm#2-2_m8&qczjiv+8ic7s&j3)zp5
 DEBUG = True
 
 ALLOWED_HOSTS = ['narwhaltutoring.up.railway.app',
-                '127.0.0:1']
+                '127.0.0.1']
 
 CSRF_TRUSTED_ORIGINS = ['https://narwhaltutoring.up.railway.app']
 
@@ -117,7 +117,7 @@ AUTH_USER_MODEL = 'Narwhal_Tutoring.User'
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en-au'
 
 TIME_ZONE = 'UTC'
 

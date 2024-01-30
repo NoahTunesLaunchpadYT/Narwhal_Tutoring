@@ -32,6 +32,17 @@ class User(AbstractUser):
     def __str__(self):
         return f"{self.username}"
 
+class Availability(models.Model):
+    tutor = models.ForeignKey(User, related_name="availability", on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    group_id = models.CharField(max_length=255)
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    event_id = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.title} - {self.start_time}"
+
 class TimeSlot(models.Model):
     time = models.IntegerField()
 
@@ -39,7 +50,7 @@ class TimeSlot(models.Model):
         return f"{self.time}"
 
 class TutorAvailability(models.Model):
-    tutor = models.OneToOneField(User, related_name="availability", on_delete=models.CASCADE)
+    tutor = models.OneToOneField(User, related_name="tutorAvailability", on_delete=models.CASCADE)
 
     monday_times = models.ManyToManyField(TimeSlot, related_name="monday")
     tuesday_times = models.ManyToManyField(TimeSlot, related_name="tuesday")

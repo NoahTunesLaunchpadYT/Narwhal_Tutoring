@@ -277,7 +277,8 @@
                     {% endif %}
                 </div>
                 <div class="tab-pane fade" id="list-log" role="tabpanel" aria-labelledby="list-log-list">
-                    <h3>Lesson Log</h3>
+                    <h3>Lesson Log (Perth Timezone)</h3>
+                    <div id='calendar'></div>
                 </div>
                 <div class="tab-pane fade" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">
                     <h3>Settings</h3>
@@ -289,5 +290,5 @@
 {% endblock %}
 
 {% block script %}
-    <script src="{% static 'javascript/dashboard.js' %}"></script>
+    <script src="{% static 'javascript/dashboards.js' %}"></script>
 {% endblock %}
