@@ -36,9 +36,10 @@ class Availability(models.Model):
     tutor = models.ForeignKey(User, related_name="availability", on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     group_id = models.CharField(max_length=255)
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
+    start_time = models.CharField(max_length=20)  # Adjust the max length as needed
+    end_time = models.CharField(max_length=20)    # Adjust the max length as needed
     event_id = models.IntegerField()
+    day_of_week = models.IntegerField()
 
     def __str__(self):
         return f"{self.title} - {self.start_time}"
@@ -48,26 +49,3 @@ class TimeSlot(models.Model):
 
     def __str__(self):
         return f"{self.time}"
-
-class TutorAvailability(models.Model):
-    tutor = models.OneToOneField(User, related_name="tutorAvailability", on_delete=models.CASCADE)
-
-    monday_times = models.ManyToManyField(TimeSlot, related_name="monday")
-    tuesday_times = models.ManyToManyField(TimeSlot, related_name="tuesday")
-    wednesday_times = models.ManyToManyField(TimeSlot, related_name="wednesday")
-    thursday_times = models.ManyToManyField(TimeSlot, related_name="thursday")
-    friday_times = models.ManyToManyField(TimeSlot, related_name="friday")
-    saturday_times = models.ManyToManyField(TimeSlot, related_name="saturday")
-    sunday_times = models.ManyToManyField(TimeSlot, related_name="sunday")
-
-    times = {'monday': monday_times,
-             'tuesday': tuesday_times,
-             'wednesday': wednesday_times,
-             'thursday': thursday_times,
-             'friday': friday_times,
-             'saturday': saturday_times,
-             'sunday': sunday_times
-             }
-    
-    def __str__(self):
-        return f"{self.tutor}'s availability"

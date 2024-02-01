@@ -1,10 +1,61 @@
 document.addEventListener('DOMContentLoaded', function() {
+    //Availability
+    var btnAvailable = document.getElementById('btnAvailable');
+    var btnUnavailable = document.getElementById('btnUnavailable');
 
-    // Calendar
+    // Function to update button styles
+    function updateButtonStyles(clickedButton, otherButton) {
+        clickedButton.classList.remove('btn-secondary');
+        clickedButton.classList.add('btn-primary');
+        otherButton.classList.remove('btn-primary');
+        otherButton.classList.add('btn-secondary');
+    }
+
+    btnAvailable.addEventListener('click', function () {
+        console.log(`${btnAvailable} clicked`);
+        updateAvailability(true);
+        updateButtonStyles(btnAvailable, btnUnavailable);
+    });
+
+    btnUnavailable.addEventListener('click', function () {
+        console.log(`${btnUnavailable} clicked`);
+        updateAvailability(false);
+        updateButtonStyles(btnUnavailable, btnAvailable);
+    });
+
+    function updateAvailability(available) {
+        // Perform asynchronous update here
+        var csrfToken = getCSRFToken();  // Implement getCSRFToken function
+
+        fetch('/update_availability/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken,
+            },
+            body: JSON.stringify({
+                available: available,
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Availability updated:', data);
+            // Update button states or perform additional actions as needed
+            btnAvailable.disabled = available;
+            btnUnavailable.disabled = !available;
+        })
+        .catch(error => {
+            console.error('Error updating availability:', error);
+        });
+    }
     
+   
+    // Calendar
     var calendarEl = document.getElementById('calendar');
+
     var calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'timeGridWeek',
+        timeZone: 'Asia/Singapore',
         locale: 'en-AU',
         slotMinTime: '08:00:00',
         slotMaxTime: '22:00:00',
@@ -16,6 +67,8 @@ document.addEventListener('DOMContentLoaded', function() {
             headers: {
                 'X-CSRFToken': getCSRFToken()
             },
+            // Default properties for events
+            //display: 'background', // or any other default property
         },
         eventClick: handleEventClick,
         select: handleSelect,
@@ -34,23 +87,32 @@ document.addEventListener('DOMContentLoaded', function() {
             );
         });
     
-        if (!isOverlapping) {
+        if (!isOverlapping && arg.start.getUTCDay() == arg.end.getUTCDay()) {
             // Create a new FullCalendar event with a default title and the selected time range
             var uniqueId = new Date().getTime();
             var newEvent = {
                 title: 'Availability',
-                start: arg.start,  // Ensure ISO string format with time zone
-                end: arg.end,
-                allDay: arg.allDay,
                 groupId: 'availabilityGroup', // Set a common groupId for all availability events
                 id: uniqueId,
-                editable: true,
+                daysOfWeek: [arg.start.getUTCDay()],
+                startTime: arg.start.toISOString().substring(11, 19),
+                endTime: arg.end.toISOString().substring(11, 19)
             };
-    
-            console.log(`Start (raw): ${arg.start}`);
-            console.log(`End (raw): ${arg.end}`);
+
+            console.log(`arg.start: ${arg.start}`)
+            console.log(`startTime: ${newEvent.startTime}`);
+            console.log(`End: ${newEvent.endTime}`);
+            console.log(`Day: ${newEvent.daysOfWeek[0]}`);
             // Add the event to the calendar
-            calendar.addEvent(newEvent);
+            var tempEvent = {
+                title: 'Availability',
+                groupId: 'availabilityGroup', // Set a common groupId for all availability events
+                id: uniqueId,
+                start: arg.start,
+                end: arg.end
+            };
+
+            calendar.addEvent(tempEvent);
 
              // Save the event to the database (you need to implement this part)
             saveEventToDatabase(newEvent);
@@ -58,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Unselect the currently selected time range
             calendar.unselect();
         } else {
-            alert('Overlapping events are not allowed.');
+            alert('Events cant overlap nor span multiple days.');
             calendar.unselect();
         }
     }
@@ -156,46 +218,4 @@ document.addEventListener('DOMContentLoaded', function() {
         activeLink.classList.add('active');
         activeTab.classList.add('show', 'active');
     }
-
-    var timetableCells = document.querySelectorAll('.dashboard-timetable-cell');
-    var isDragging = false;
-    var isSelecting = true;  // Initial state is selecting
-    var selectedCells = [];
-
-    timetableCells.forEach(function(cell) {
-        var hiddenInput = cell.querySelector('.timeslot');
-        cell.addEventListener('mousedown', function(event) {
-            isDragging = true;
-            selectedCells.push(cell);
-
-            if (cell.classList.contains('selected')) {
-                isSelecting = false;
-                cell.classList.remove('selected');
-                hiddenInput.value = 'false'
-            } else {
-                isSelecting = true;
-                cell.classList.add('selected');
-                hiddenInput.value = 'true'
-            }
-        });
-
-        cell.addEventListener('mouseover', function() {
-            if (isDragging) {
-                selectedCells.push(cell);
-
-                if (isSelecting) {
-                    cell.classList.add('selected');
-                    hiddenInput.value = 'true'
-                } else {
-                    cell.classList.remove('selected');
-                    hiddenInput.value = 'false'
-                }
-            }
-        });
-
-        cell.addEventListener('mouseup', function() {
-            isDragging = false;
-            selectedCells = [];
-        });
-    });
 });

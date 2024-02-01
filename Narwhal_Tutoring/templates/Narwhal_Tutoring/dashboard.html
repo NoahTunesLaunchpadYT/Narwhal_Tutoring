@@ -7,14 +7,26 @@
         <h1 class="center-title">
             Dashboard
         </h1>
+        <div class="center-title">
+        {% if user.tutor %}
+            <!-- Button group for availability -->
+            <div class="btn-group mb-3" role="group" aria-label="Availability">
+                <button type="button" class="btn {% if user.available %}btn-primary{% else %}btn-secondary{% endif %}" id="btnAvailable">Available</button>
+                <button type="button" class="btn {% if not user.available %}btn-primary{% else %}btn-secondary{% endif %}" id="btnUnavailable">Unavailable</button>
+            </div>
+            <p>
+                (Only tutors who are "available" can gain new clients.)
+            </p>
+        {% endif %}
+        
+        </div>
     </section>
     <section id="dashboard-panel">
         <div class="dashboard-nav">
             <div class="col-12">
               <div class="list-group" id="list-tab" role="tablist">
                 <a class="list-group-item list-group-item-action active" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="profile">Profile</a>
-                <a class="list-group-item list-group-item-action" id="list-schedule-list" data-toggle="list" href="#list-schedule" role="tab" aria-controls="schedule">Schedule</a>
-                <a class="list-group-item list-group-item-action" id="list-log-list" data-toggle="list" href="#list-log" role="tab" aria-controls="log">Lesson Log</a>
+                <a class="list-group-item list-group-item-action" id="list-availabilities-list" data-toggle="list" href="#list-availabilities" role="tab" aria-controls="availabilities">Availabilities</a>
                 <a class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list" href="#list-settings" role="tab" aria-controls="settings">Settings</a>
               </div>
             </div>
@@ -37,18 +49,6 @@
                         {% csrf_token %}
 
                         <p>Hit the "Submit" button at the bottom to save changes</p>
-
-                        {% if user.tutor %}
-                            <!-- Available -->
-                            <div class="mb-3 form-check">
-                                <input type="checkbox" class="form-check-input" id="available" name="available" {% if user.available %}checked{% endif %}>
-                                <label class="form-check-label" for="available">Available</label>
-                            </div>
-                            <p>
-                                (Only tutors who are "available" can gain new clients.)
-                            </p>
-                        {% endif %}
-                    
                     
                         <!-- Username -->
                         <div class="mb-3">
@@ -140,144 +140,8 @@
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>                                             
                 </div>
-                <div class="tab-pane fade" id="list-schedule" role="tabpanel" aria-labelledby="list-schedule-list">
-                    {% if user.tutor %}
-                        <h3>Semester 1 availabilities</h3>
-                        {% if user.available %}
-                            You are listed as <strong>available</strong>.
-                            <form action="{% url 'submit-timetable' %}#list-schedule" method="post">
-                                <div class="timetable">
-                                    {% csrf_token %}
-                                    <div class="column">
-                                        <h6 class="day-header">times</h6>
-                                        {% for time in times %}
-                                            <p class="timetable-time">{{ time }}</p>
-                                        {% endfor %}
-                                    </div>
-                                                            
-                                    <!-- Monday -->
-                                    <div class="column">
-                                        <h6 class="day-header">Mon</h6>
-                                        {% for time in times %}
-                                            {% if time in user.availability.monday_times.all %}
-                                                <div class="dashboard-timetable-cell selected">
-                                                    <input type="hidden" class="timeslot" name="monday-{{ time }}" value="true">
-                                                </div>
-                                            {% else %}
-                                                <div class="dashboard-timetable-cell">
-                                                    <input type="hidden" class="timeslot" name="monday-{{ time }}" value="false">
-                                                </div>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </div>
-    
-                                    <!-- Tuesday -->
-                                    <div class="column">
-                                        <h6 class="day-header">Tue</h6>
-                                        {% for time in times %}
-                                            {% if time in user.availability.tuesday_times.all %}
-                                                <div class="dashboard-timetable-cell selected">
-                                                    <input type="hidden" class="timeslot" name="tuesday-{{ time }}" value="true">
-                                                </div>
-                                            {% else %}
-                                                <div class="dashboard-timetable-cell">
-                                                    <input type="hidden" class="timeslot" name="tuesday-{{ time }}" value="false">
-                                                </div>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </div>
-    
-                                    <!-- Wednesday -->
-                                    <div class="column">
-                                        <h6 class="day-header">Wed</h6>
-                                        {% for time in times %}
-                                            {% if time in user.availability.wednesday_times.all %}
-                                                <div class="dashboard-timetable-cell selected">
-                                                    <input type="hidden" class="timeslot" name="wednesday-{{ time }}" value="true">
-                                                </div>
-                                            {% else %}
-                                                <div class="dashboard-timetable-cell">
-                                                    <input type="hidden" class="timeslot" name="wednesday-{{ time }}" value="false">
-                                                </div>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </div>
-    
-                                    <!-- Thursday -->
-                                    <div class="column">
-                                        <h6 class="day-header">Thu</h6>
-                                        {% for time in times %}
-                                            {% if time in user.availability.thursday_times.all %}
-                                                <div class="dashboard-timetable-cell selected">
-                                                    <input type="hidden" class="timeslot" name="thursday-{{ time }}" value="true">
-                                                </div>
-                                            {% else %}
-                                                <div class="dashboard-timetable-cell">
-                                                    <input type="hidden" class="timeslot" name="thursday-{{ time }}" value="false">
-                                                </div>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </div>
-    
-                                    <!-- Friday -->
-                                    <div class="column">
-                                        <h6 class="day-header">Fri</h6>
-                                        {% for time in times %}
-                                            {% if time in user.availability.friday_times.all %}
-                                                <div class="dashboard-timetable-cell selected">
-                                                    <input type="hidden" class="timeslot" name="friday-{{ time }}" value="true">
-                                                </div>
-                                            {% else %}
-                                                <div class="dashboard-timetable-cell">
-                                                    <input type="hidden" class="timeslot" name="friday-{{ time }}" value="false">
-                                                </div>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </div>
-    
-                                    <!-- Saturday -->
-                                    <div class="column">
-                                        <h6 class="day-header">Sat</h6>
-                                        {% for time in times %}
-                                            {% if time in user.availability.saturday_times.all %}
-                                                <div class="dashboard-timetable-cell selected">
-                                                    <input type="hidden" class="timeslot" name="saturday-{{ time }}" value="true">
-                                                </div>
-                                            {% else %}
-                                                <div class="dashboard-timetable-cell">
-                                                    <input type="hidden" class="timeslot" name="saturday-{{ time }}" value="false">
-                                                </div>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </div>
-    
-                                    <!-- Sunday -->
-                                    <div class="column">
-                                        <h6 class="day-header">Sun</h6>
-                                        {% for time in times %}
-                                            {% if time in user.availability.sunday_times.all %}
-                                                <div class="dashboard-timetable-cell selected">
-                                                    <input type="hidden" class="timeslot" name="sunday-{{ time }}" value="true">
-                                                </div>
-                                            {% else %}
-                                                <div class="dashboard-timetable-cell">
-                                                    <input type="hidden" class="timeslot" name="sunday-{{ time }}" value="false">
-                                                </div>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </div>
-                                </div>                        
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                            </form>
-                        {% else %}
-                            You are listed as <strong>unavailable</strong>. Got to profile, check "Available" and hit "Submit" to be listed as available.
-                        {% endif %}
-                    {% else %}
-                        <h3>Schedule</h3>
-                    {% endif %}
-                </div>
-                <div class="tab-pane fade" id="list-log" role="tabpanel" aria-labelledby="list-log-list">
-                    <h3>Lesson Log (Perth Timezone)</h3>
+                <div class="tab-pane fade" id="list-availabilities" role="tabpanel" aria-labelledby="list-availabilities-list">
+                    <h3>Availabilities (Perth Timezone)</h3>
                     <div id='calendar'></div>
                 </div>
                 <div class="tab-pane fade" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">

@@ -166,7 +166,6 @@ def dashboard(request):
             description = request.POST.get('description')
             university = request.POST.get('university')
             degree = request.POST.get('degree')
-            available = 'available' in request.POST
 
             user.atar = atar
             user.suburb = suburb
@@ -174,7 +173,6 @@ def dashboard(request):
             user.description = description
             user.university = university
             user.degree = degree
-            user.available = available
         else:
             # Non-tutor-specific fields
             address = request.POST.get('address')
@@ -201,29 +199,6 @@ def dashboard(request):
         "times": times,
         "user": user,
     })
-
-
-def submit_timetable(request):
-    if request.method == 'POST':
-        user = request.user
-        days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
-
-        times = TimeSlot.objects.all()
-        available_times = []
-
-        for day in days:
-            for time in times:
-                if request.POST.get(f'{day}-{time}') == 'true':
-                    available_times.append(time.id)
-
-            print(f"{user.availability.times[day]}")
-            getattr(user.availability, f'{day}_times').set(available_times)
-            available_times = []
-        
-        user.save()
-
-        messages.success(request, 'Timetable updated successfully.')
-        return HttpResponseRedirect(reverse("dashboard"))
     
 def tutor(request, tutor_id):
     times = TimeSlot.objects.all()
@@ -247,16 +222,18 @@ def save_availability(request):
             
             # Extracting data from the request
             title = data.get('title', 'Availability')  # Default title if not provided
-            start_time_str = data.get('start')
-            end_time_str = data.get('end')
-
-            start_time = datetime.strptime(start_time_str, '%Y-%m-%dT%H:%M:%S.%fZ')
-            end_time = datetime.strptime(end_time_str, '%Y-%m-%dT%H:%M:%S.%fZ')
+            start_time = data.get('startTime')
+            end_time = data.get('endTime')
+            day_of_week = data.get('daysOfWeek', [])[0]  # Assuming daysOfWeek is an array
             group_id = data.get('groupId', '0')  # Default group_id if not provided
             event_id = data.get('id', '0')
             
             # Assuming the logged-in user is the tutor
             tutor = request.user
+
+            print('startTime:')
+            print(data.get('startTime'))
+
             
             # Create and save the Availability instance
             availability = Availability.objects.create(
@@ -266,6 +243,7 @@ def save_availability(request):
                 end_time=end_time,
                 group_id=group_id,
                 event_id=event_id,
+                day_of_week=day_of_week,
             )
 
             print(f'Start Time: {start_time}')
@@ -273,18 +251,22 @@ def save_availability(request):
             
             return JsonResponse({'message': 'Event saved successfully'}, status=200)
         except Exception as e:
+            print(e)
             return JsonResponse({'error': str(e)}, status=500)
 
 def delete_availability(request, event_id):
     if request.method == 'DELETE':
-        availability = Availability.objects.get(event_id=event_id)
+        try:
+            availability = Availability.objects.get(event_id=event_id)
 
-        # Check if the tutor deleting the availability is the owner of the availability
-        if availability.tutor == request.user:
-            availability.delete()
-            return JsonResponse({'status': 'success'})
-        else:
-            return JsonResponse({'status': 'error', 'message': 'Permission denied'}, status=403)
+            # Check if the tutor deleting the availability is the owner of the availability
+            if availability.tutor == request.user:
+                availability.delete()
+                return JsonResponse({'status': 'success'})
+            else:
+                return JsonResponse({'status': 'error', 'message': 'Permission denied'}, status=403)
+        except Availability.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Availability not found'}, status=404)
 
 def get_availability(request):
     if request.method == 'GET':
@@ -297,16 +279,45 @@ def get_availability(request):
         # Convert events to a format suitable for FullCalendar
         events = []
         for availability in availability_events:
+
+            
             events.append({
                 'id': availability.event_id,
                 'title': availability.title,
-                'start': availability.start_time.isoformat(),
-                'end': availability.end_time.isoformat(),
+                'startTime': availability.start_time,
+                'endTime': availability.end_time, 
                 'groupId': availability.group_id,
-                'editable': True
+                'daysOfWeek': [availability.day_of_week],
             })
+
+            '''            
+            events.append({
+                'title': 'Recurring Event',
+                'groupId': 'test',
+                'daysOfWeek': [availability.day_of_week],
+                'startTime': availability.start_time,
+                'endTime': availability.end_time, 
+            })'''
+
+
             print(availability.group_id)
-            print(f'Start Time: {availability.start_time.isoformat()}')
-            print(f'End Time: {availability.end_time.isoformat()}')
+            print(f'Start Time: {availability.start_time}')
+            print(f'End Time: {availability.end_time}')
 
         return JsonResponse(events, safe=False)
+
+def update_availability(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            available = data.get('available', False)
+
+            # Update the user's availability (replace this with your actual logic)
+            request.user.available = available
+            request.user.save()
+
+            return JsonResponse({'message': 'Availability updated successfully'}, status=200)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=400)
