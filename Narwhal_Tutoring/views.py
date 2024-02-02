@@ -268,10 +268,10 @@ def delete_availability(request, event_id):
         except Availability.DoesNotExist:
             return JsonResponse({'status': 'error', 'message': 'Availability not found'}, status=404)
 
-def get_availability(request):
+def get_availability(request, tutor_id):
     if request.method == 'GET':
         # Assuming the logged-in user is the tutor
-        tutor = request.user
+        tutor = User.objects.get(id=tutor_id)
 
         # Fetch availability events for the tutor
         availability_events = Availability.objects.filter(tutor=tutor)

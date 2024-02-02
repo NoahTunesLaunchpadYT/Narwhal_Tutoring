@@ -14,24 +14,42 @@ document.addEventListener('DOMContentLoaded', () => {
       slotMaxTime: '22:00:00',
       selectable: true,
       selectMirror: true,
-      eventOverlap: false,
+      eventOverlap: true,
       events: {
-          url: '/get_availability/',
+          url: `/get_availability/${tutorId}`,
           headers: {
               'X-CSRFToken': csrfToken
           },
           // Default properties for events
           display: 'background', // or any other default property
       },
-      //eventClick: handleEventClick,
-      //select: handleSelect,
+      eventClick: handleEventClick,
+      select: handleSelect,
+      editable: true,
+      eventStartEditable: true,
+      eventResizableFromStart: true,
+      eventDurationEditable: true,
   });
+
+  function handleEventClick(arg) {
+    if (confirm('Do you want to delete this selection?')) {
+        // Remove the event from the calendar
+        arg.event.remove();
+    }
+  }
+
+  function handleSelect(arg) {
+    calendar.addEvent(arg);
+  }
+
+
   
   setTimeout(function() {
       calendar.render();
   });
 
   function updateBookedTimesList() {
+    calendar.getEvents()
     // Clear the current list
     timesBookedDiv.innerHTML = '';
 

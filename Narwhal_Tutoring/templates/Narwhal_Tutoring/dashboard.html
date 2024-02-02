@@ -154,5 +154,8 @@
 {% endblock %}
 
 {% block script %}
+    <script>
+        var tutorId = "{{ tutor.id }}";
+    </script>
     <script src="{% static 'javascript/dashboards.js' %}"></script>
 {% endblock %}

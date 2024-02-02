@@ -17,7 +17,7 @@ urlpatterns = [
     path('update_availability/', views.update_availability, name='update_availability'),
     path('save_availability/', views.save_availability, name='save_availability'),
     path('delete_availability/<int:event_id>/', views.delete_availability, name='delete_availability'),
-    path('get_availability/', views.get_availability, name='get_availability')
+    path('get_availability/<int:tutor_id>', views.get_availability, name='get_availability')
 ]
 
 if settings.DEBUG:

@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
         selectMirror: true,
         eventOverlap: false,
         events: {
-            url: '/get_availability/',
+            url: '/get_availability/${tutorId}/',
             headers: {
                 'X-CSRFToken': getCSRFToken()
             },
