@@ -42,7 +42,7 @@
         </div>
 
         <div class="col-12 calendar-container">
-            <h3>Book a slot in {{ tutor }}'s timetable.</h3>
+            <h3>Select a timeslot</h3>
             {% if user.is_authenticated %}
             {% else %}
                 <h4>You are not currently logged in.
@@ -56,85 +56,7 @@
 
             {% if tutor.available %}
                 <form action="{{ request.path }}" method="post">
-                    <div class="timetable">
-                        {% csrf_token %}
-                        <div class="column">
-                            <h6 class="day-header">times</h6>
-                            {% for time in times %}
-                                <p class="timetable-time">{{ time }}</p>
-                            {% endfor %}
-                        </div>
-                                                
-                        <!-- Monday -->
-                        <div class="column">
-                            <h6 class="day-header">Mon</h6>
-                            {% for time in times %}
-                                <div class="timetable-cell {% if time in tutor.availability.monday_times.all %}available{% endif %}">
-                                    <input type="hidden" class="timeslot" name="monday-{{ time }}" value="true">
-                                </div>
-                            {% endfor %}
-                        </div>
-        
-                        <!-- Tuesday -->
-                        <div class="column">
-                            <h6 class="day-header">Tue</h6>
-                            {% for time in times %}
-                                <div class="timetable-cell {% if time in tutor.availability.tuesday_times.all %}available{% endif %}">
-                                    <input type="hidden" class="timeslot" name="tuesday-{{ time }}" value="true">
-                                </div>
-                            {% endfor %}
-                        </div>
-        
-                        <!-- Wednesday -->
-                        <div class="column">
-                            <h6 class="day-header">Wed</h6>
-                            {% for time in times %}
-                                <div class="timetable-cell {% if time in tutor.availability.wednesday_times.all %}available{% endif %}">
-                                    <input type="hidden" class="timeslot" name="wednesday-{{ time }}" value="true">
-                                </div>
-                            {% endfor %}
-                        </div>
-        
-                        <!-- Thursday -->
-                        <div class="column">
-                            <h6 class="day-header">Thu</h6>
-                            {% for time in times %}
-                                <div class="timetable-cell {% if time in tutor.availability.thursday_times.all %}available{% endif %}">
-                                    <input type="hidden" class="timeslot" name="thursday-{{ time }}" value="true">
-                                </div>
-                            {% endfor %}
-                        </div>
-        
-                        <!-- Friday -->
-                        <div class="column">
-                            <h6 class="day-header">Fri</h6>
-                            {% for time in times %}
-                                <div class="timetable-cell {% if time in tutor.availability.friday_times.all %}available{% endif %}">
-                                    <input type="hidden" class="timeslot" name="friday-{{ time }}" value="true">
-                                </div>
-                            {% endfor %}
-                        </div>
-        
-                        <!-- Saturday -->
-                        <div class="column">
-                            <h6 class="day-header">Sat</h6>
-                            {% for time in times %}
-                                <div class="timetable-cell {% if time in tutor.availability.saturday_times.all %}available{% endif %}">
-                                    <input type="hidden" class="timeslot" name="saturday-{{ time }}" value="true">
-                                </div>
-                            {% endfor %}
-                        </div>
-        
-                        <!-- Sunday -->
-                        <div class="column">
-                            <h6 class="day-header">Sun</h6>
-                            {% for time in times %}
-                                <div class="timetable-cell {% if time in tutor.availability.sunday_times.all %}available{% endif %}">
-                                    <input type="hidden" class="timeslot" name="sunday-{{ time }}" value="true">
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </div>
+                    <div id='calendar'></div>
                     <div class="booking-info">
                         {% if user.is_authenticated %}
                             <div>
@@ -207,5 +129,8 @@
 {% endblock %}
 
 {% block script %}
-    <script src="{% static 'javascript/tutor.js' %}"></script>
+    <script>
+        var csrfToken = "{{ csrf_token }}";
+    </script>
+    <script src="{% static 'javascript/tuto.js' %}"></script>
 {% endblock %}

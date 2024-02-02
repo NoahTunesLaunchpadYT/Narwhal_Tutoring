@@ -1,35 +1,34 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-  var timetableCells = document.querySelectorAll('.timetable-cell');
   var timesBookedDiv = document.querySelector('#times-booked');
   var bookedTimes = []; // Array to store booked times
 
-  timetableCells.forEach((cell) => {
-    var hiddenInput = cell.querySelector('.timeslot');
+  // Calendar
+  var calendarEl = document.getElementById('calendar');
 
-    cell.onclick = () => {
-      if (cell.classList.contains('available')) {
-        if (cell.classList.contains('selected')) {
-          cell.classList.remove('selected');
-          hiddenInput.value = 'false';
-
-          // Remove the booked time from the array
-          const index = bookedTimes.indexOf(hiddenInput.name);
-          if (index !== -1) {
-            bookedTimes.splice(index, 1);
-          }
-        } else {
-          cell.classList.add('selected');
-          hiddenInput.value = 'true';
-
-          // Add the booked time to the array
-          bookedTimes.push(hiddenInput.name);
-        }
-
-        // Update the list of booked times
-        updateBookedTimesList();
-      }
-    };
+  var calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'timeGridWeek',
+      timeZone: 'Asia/Singapore',
+      locale: 'en-AU',
+      slotMinTime: '08:00:00',
+      slotMaxTime: '22:00:00',
+      selectable: true,
+      selectMirror: true,
+      eventOverlap: false,
+      events: {
+          url: '/get_availability/',
+          headers: {
+              'X-CSRFToken': csrfToken
+          },
+          // Default properties for events
+          display: 'background', // or any other default property
+      },
+      //eventClick: handleEventClick,
+      //select: handleSelect,
+  });
+  
+  setTimeout(function() {
+      calendar.render();
   });
 
   function updateBookedTimesList() {

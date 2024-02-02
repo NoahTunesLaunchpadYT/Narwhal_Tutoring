@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', function() {
     var btnAvailable = document.getElementById('btnAvailable');
     var btnUnavailable = document.getElementById('btnUnavailable');
 
-    // Function to update button styles
     function updateButtonStyles(clickedButton, otherButton) {
         clickedButton.classList.remove('btn-secondary');
         clickedButton.classList.add('btn-primary');
@@ -175,12 +174,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    
     function getCSRFToken() {
         // Retrieve CSRF token from the HTML DOM or any other method you use
         return document.getElementsByName('csrfmiddlewaretoken')[0].value;
     }
-
 
     // Navbar
 

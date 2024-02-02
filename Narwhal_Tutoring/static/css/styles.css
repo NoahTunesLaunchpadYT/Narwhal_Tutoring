@@ -484,6 +484,14 @@ font-weight: 300;
 }
 
 /* tutor page */
+.calendar-container {
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 10px;
+    display: block;
+    box-shadow: 10px 10px 70px rgba(70, 62, 221, 0.02);
+}
 
 #times-booked {
     margin: 10px;
