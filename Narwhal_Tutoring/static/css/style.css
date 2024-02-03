@@ -517,12 +517,12 @@ font-weight: 300;
 }
 
 .price-tag {
+    width: 200px;
     padding: 10px;
     margin: 10px;
     border: 1px solid black;
     border-radius: 10px;
     box-shadow: 10px 10px 70px rgba(70, 62, 221, 0.02);
-    text-align: center;
 }
 
 .price-tag:hover {

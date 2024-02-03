@@ -69,11 +69,10 @@
                                 </div>
                                 <p>
                                     Exact lessons times to be confirmed with the tutor. <br>
-                                    No travel fees within {{ 10 }}km from {{ tutor.suburb }}.
+                                    Please read our <a href="{% url 'tos' %}" target="_blank">terms of service</a> for more info.
                                 </p>
-                                <button type="submit" class="btn btn-primary" value="1">Purchase 1 week of tutoring</button>
-                                <button type="submit" class="btn btn-primary" value="5">Purchase 5 weeks of tutoring</button>
-                                <button type="submit" class="btn btn-primary" value="10">Purchase 10 weeks of tutoring</button>
+                                <button id="checkout-button">Checkout</button>
+                                <p>Still unsure if we are right for you? Please call 0421286031 to have any questions answered.</p>
                             </div>
                         {% else %}
                             <div>
@@ -87,36 +86,32 @@
                         {% endif %}
                         <div id="pricing-info">
                             <div class="price-tag" id="hr-1">
-                                <h4>
-                                    1hr per week.
-                                </h4>
-                                <h3>
-                                    $70/hr
-                                </h3>
+                                <h5>
+                                    Single Lesson
+                                </h5>
+                                <p>
+                                    Regular Rate: $70/hr
+                                </p>
                             </div>
                             <div class="price-tag" id="hr-2">
-                                <h4>
-                                    2hr per week.
-                                </h4>
-                                <h3>
-                                    $63/hr
-                                </h3>
+                                <h5>
+                                    5-Hours Package
+                                </h5>
+                                <p>
+                                    Discount: 10%<br>
+                                    Price per Hour: $63/hr<br>
+                                    Total Package: $315
+                                </p>
                             </div>
                             <div class="price-tag" id="hr-3">
-                                <h4>
-                                    3hr per week.
-                                </h4>
-                                <h3>
-                                    $60/hr
-                                </h3>
-                            </div>
-                            <div class="price-tag" id="hr-4">
-                                <h4>
-                                    4+hr per week.
-                                </h4>
-                                <h3>
-                                    $58/hr
-                                </h3>
+                                <h5>
+                                    10-Hours Package
+                                </h5>
+                                <p>
+                                    Discount: 15%<br>
+                                    Price per Hour: $60/hr<br>
+                                    Total Package: $600
+                                </p>
                             </div>
                         </div>
                     </div>

@@ -136,3 +136,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#Stripe Stuff
+STRIPE_PUBLIC_KEY = 'pk_live_51OYnzrKCFeavPzHiXRW7BKPuDOO2ofyXoZqmZ1ZRgi876NsnbwfB3CNpDeBO1JrOkf0X36PQgmgVC5uc6CT08rfO002lfYvOiF'
+STRIPE_SECRET_KEY = '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'
