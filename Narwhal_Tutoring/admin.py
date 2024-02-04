@@ -6,3 +6,14 @@ admin.site.register(User)
 admin.site.register(TimeSlot)
 admin.site.register(Subject)
 admin.site.register(Availability)
+
+class PriceInlineAdmin(admin.TabularInline):
+    model = Price
+    extra = 0
+ 
+ 
+class ProductAdmin(admin.ModelAdmin):
+    inlines = [PriceInlineAdmin]
+ 
+ 
+admin.site.register(Product, ProductAdmin)

@@ -17,33 +17,6 @@ from django.views.decorators.csrf import csrf_exempt
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
-@csrf_exempt
-def checkout(request):
-    return render(request, 'checkout.html')
-
-@csrf_exempt
-def create_checkout_session(request):
-    try:
-        checkout_session = stripe.checkout.Session.create(
-            payment_method_types=['card'],
-            line_items=[{
-                'price': 'price_1OfoEqKCFeavPzHiIZflECLS',
-                'quantity': 1,
-            }],
-            mode='payment',
-            success_url=request.build_absolute_uri('/success/'),
-            cancel_url=request.build_absolute_uri('/cancel/'),
-        )
-        return JsonResponse({'id': checkout_session.id})
-    except Exception as e:
-        return JsonResponse({'error': str(e)}, status=403)
-
-def success(request):
-    return HttpResponse("Success")
-
-def cancel(request):
-    return HttpResponse("Cancel")
-
 # Create your views here.
 def index(request):
     tutors = User.objects.filter(tutor=True)
@@ -173,8 +146,8 @@ def dashboard(request):
 
     try:
         availability = user.availability
-    except TutorAvailability.DoesNotExist:
-        availability = TutorAvailability(tutor=user)
+    except Availability.DoesNotExist:
+        availability = Availability(tutor=user)
         availability.save()
 
     if request.method == 'POST':
@@ -231,17 +204,23 @@ def dashboard(request):
     })
     
 def tutor(request, tutor_id):
-    times = TimeSlot.objects.all()
     tutors = User.objects.filter(tutor=True)
+    
     
     try:
         tutor = tutors.get(id=tutor_id)
-        return render(request, "Narwhal_Tutoring/tutor.html", {
+        product = Product.objects.get(name="Test Product")
+        prices = Price.objects.filter(product=product)
+        
+        context = {
+            "product": product,
+            "prices": prices,
             'tutor': tutor,
-            'times': times
-        })
-    except:
-        messages.error(request, f'{tutor_id} is not a tutor.', extra_tags='danger')
+        }
+        
+        return render(request, "Narwhal_Tutoring/tutor.html", context)
+    except Exception as e:
+        messages.error(request, f'{tutor_id} is not a tutor. {e}', extra_tags='danger')
         return render(request, "Narwhal_Tutoring/tutor.html")
 
 def save_availability(request):
@@ -329,11 +308,6 @@ def get_availability(request, tutor_id):
                 'endTime': availability.end_time, 
             })'''
 
-
-            print(availability.group_id)
-            print(f'Start Time: {availability.start_time}')
-            print(f'End Time: {availability.end_time}')
-
         return JsonResponse(events, safe=False)
 
 def update_availability(request):
@@ -351,3 +325,43 @@ def update_availability(request):
             return JsonResponse({'error': str(e)}, status=500)
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=400)
+    
+def create_checkout_session(request, pk):
+    print(pk)
+    price = Price.objects.get(id=pk)
+    domain = "https://yourdomain.com"
+    if settings.DEBUG:
+        domain = "http://127.0.0.1:8000"
+    
+    checkout_session = stripe.checkout.Session.create(
+        payment_method_types=['card'],
+        line_items=[
+            {
+                'price': price.stripe_price_id,
+                'quantity': 1,
+            },
+        ],
+        mode='payment',
+        success_url=domain + '/success/',
+        cancel_url=domain + '/cancel/',
+    )
+    
+    return redirect(checkout_session.url)
+
+def success(request):
+    return render(request, 'Narwhal_Tutoring/success.html')
+
+def cancel(request):
+    return render(request, 'Narwhal_Tutoring/cancel.html')
+
+def landing(request):
+    product = Product.objects.get(name="Test Product")
+    prices = Price.objects.filter(product=product)
+    
+    context = {
+        "product": product,
+        "prices": prices
+    }
+    
+    return render(request, 'Narwhal_Tutoring/landing.html', context)
+

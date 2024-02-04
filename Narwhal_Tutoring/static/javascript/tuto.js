@@ -121,7 +121,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-
   setTimeout(function() {
       calendar.render();
   });
@@ -213,34 +212,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  var stripe = Stripe('{{STRIPE_PUBLIC_KEY}}');
-  var checkoutButton = document.getElementById('checkout-button');
-  
-  checkoutButton.addEventListener('click', function () {
-      console.log("Going to check out");
-      console.log(`csrf token: ${csrfToken}`);
-    
-      fetch('/create-checkout-session/', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-              'X-CSRFToken': csrfToken  // Include the CSRF token in the headers
-          },
-      })
-      .then(response => response.json())
-      .then(session => {
-          return stripe.redirectToCheckout({ sessionId: session.id });
-      })
-      .then(result => {
-          if (result.error) {
-              alert(result.error.message);
-          }
-      })
-      .catch(error => {
-          console.error('Error:', error);
-      }); 
-  });
+  var form = document.getElementById('checkout-form');
+  form.addEventListener('submit', function (event) {
+      event.preventDefault();
 
+      const cart = calendar.getEvents();
+
+      
+
+      // Get the price ID and quantity from your JavaScript logic
+      var priceId = "price_1OfzEfKCFeavPzHiTpY33afM";
+      var quantity = 3;
+
+      // Modify the form action URL
+      form.action = "{% url 'create-checkout-session' 0 %}".replace('0', priceId) + '/' + quantity + '/';
+
+      // Submit the form
+      form.submit();
+  });
 
 });
 

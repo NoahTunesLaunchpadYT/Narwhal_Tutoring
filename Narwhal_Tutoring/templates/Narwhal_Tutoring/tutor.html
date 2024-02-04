@@ -55,70 +55,85 @@
             {% endif %}
 
             {% if tutor.available %}
-                <form action="{{ request.path }}" method="post">
-                    <div id='calendar'></div>
-                    <div class="booking-info">
-                        {% if user.is_authenticated %}
-                            <div>
-                                <div id="times-booked">
-                                    You have not selected a time yet. 
-                                </div>
-                                <div>
-                                    <label for="start-date">Start date:</label>
-                                    <input type="date" id="start-date" name="start-date">
-                                </div>
-                                <p>
-                                    Exact lessons times to be confirmed with the tutor. <br>
-                                    Please read our <a href="{% url 'tos' %}" target="_blank">terms of service</a> for more info.
-                                </p>
-                                <button id="checkout-button">Checkout</button>
-                                <p>Still unsure if we are right for you? Please call 0421286031 to have any questions answered.</p>
+                <div id='calendar'></div>
+                <div class="booking-info">
+                    {% if user.is_authenticated %}
+                        <div>
+                            <div id="times-booked">
+                                You have not selected a time yet. 
                             </div>
-                        {% else %}
-                            <div>
-                                <h4>You are not currently logged in.
-                                    <a href="{% url 'login' %}?next={{ request.path }}">Log In</a>
-                                    or
-                                    <a href="{% url 'register' %}?next={{ request.path }}">Register</a>
-                                    to book your lesson.
-                                </h4>
-                            </div>
-                        {% endif %}
-                        <div id="pricing-info">
-                            <div class="price-tag" id="hr-1">
-                                <h5>
-                                    Single Lesson
-                                </h5>
-                                <p>
-                                    Regular Rate: $70/hr
-                                </p>
-                            </div>
-                            <div class="price-tag" id="hr-2">
-                                <h5>
-                                    5-Hours Package
-                                </h5>
-                                <p>
-                                    Discount: 10%<br>
-                                    Price per Hour: $63/hr<br>
-                                    Total Package: $315
-                                </p>
-                            </div>
-                            <div class="price-tag" id="hr-3">
-                                <h5>
-                                    10-Hours Package
-                                </h5>
-                                <p>
-                                    Discount: 15%<br>
-                                    Price per Hour: $60/hr<br>
-                                    Total Package: $600
-                                </p>
-                            </div>
+                            <p>
+                                Exact lessons times to be confirmed with the tutor. <br>
+                                Please read our <a href="{% url 'tos' %}" target="_blank">terms of service</a> for more info.
+                            </p>
+                            <form id="checkout-form" action="{% url 'create-checkout-session' 2 %}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit">Checkout</button>
+                            </form>
+                            <p>Still unsure if we are right for you? Please call 0421286031 to have any questions answered.</p>
+                        </div>
+                    {% else %}
+                        <div>
+                            <h4>You are not currently logged in.
+                                <a href="{% url 'login' %}?next={{ request.path }}">Log In</a>
+                                or
+                                <a href="{% url 'register' %}?next={{ request.path }}">Register</a>
+                                to book your lesson.
+                            </h4>
+                        </div>
+                    {% endif %}
+                    <div id="pricing-info">
+                        <div class="price-tag" id="hr-1">
+                            <h5>
+                                Single Lesson
+                            </h5>
+                            <p>
+                                Regular Rate: $70/hr
+                            </p>
+                        </div>
+                        <div class="price-tag" id="hr-2">
+                            <h5>
+                                5-Hours Package
+                            </h5>
+                            <p>
+                                Discount: 10%<br>
+                                Price per Hour: $63/hr<br>
+                                Total Package: $315
+                            </p>
+                        </div>
+                        <div class="price-tag" id="hr-3">
+                            <h5>
+                                10-Hours Package
+                            </h5>
+                            <p>
+                                Discount: 15%<br>
+                                Price per Hour: $60/hr<br>
+                                Total Package: $600
+                            </p>
                         </div>
                     </div>
-                </form>
+                </div>
             {% else %}
                 {{ tutor }} is <strong>unavailable</strong>.
             {% endif %}
+        </div>
+    </section>
+    <section>
+        <div class="product">
+            <div class="description">
+                <h3>{{ product.name }}</h3>
+                <hr />
+                {% for price in prices %}
+ 
+                <div>
+                    <h5>${{ price.get_display_price }}</h5>
+                    <form action="{% url 'create-checkout-session' price.id %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit">Checkout</button>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
         </div>
     </section>
 {% endblock %}
@@ -129,4 +144,6 @@
         var tutorId = "{{ tutor.id }}";
     </script>
     <script src="{% static 'javascript/tuto.js' %}"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
+    <script src="https://js.stripe.com/v3/"></script>
 {% endblock %}
