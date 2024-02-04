@@ -20,6 +20,8 @@ urlpatterns = [
     path('get_availability/<int:tutor_id>', views.get_availability, name='get_availability'),
     path('checkout/', views.checkout, name='checkout'),
     path('create-checkout-session/', views.create_checkout_session, name='create-checkout-session'),
+    path('success', views.success, name='success'),
+    path('cancel', views.cancel, name='cancel')
 ]
 
 if settings.DEBUG:

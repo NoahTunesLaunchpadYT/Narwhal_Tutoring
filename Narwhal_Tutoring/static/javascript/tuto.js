@@ -213,12 +213,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  var stripe = Stripe('{{STRIPE_PUBLIC_KEY}}');  // Replace with your actual public key
+  var stripe = Stripe('{{STRIPE_PUBLIC_KEY}}');
   var checkoutButton = document.getElementById('checkout-button');
-
+  
   checkoutButton.addEventListener('click', function () {
+      console.log("Going to check out");
+      console.log(`csrf token: ${csrfToken}`);
+    
       fetch('/create-checkout-session/', {
           method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': csrfToken  // Include the CSRF token in the headers
+          },
       })
       .then(response => response.json())
       .then(session => {
@@ -231,7 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
       })
       .catch(error => {
           console.error('Error:', error);
-      });
+      }); 
   });
 
 
