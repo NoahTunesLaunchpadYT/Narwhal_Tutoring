@@ -66,9 +66,9 @@
                                 Exact lessons times to be confirmed with the tutor. <br>
                                 Please read our <a href="{% url 'tos' %}" target="_blank">terms of service</a> for more info.
                             </p>
-                            <form id="checkout-form" action="{% url 'create-checkout-session' 2 %}" method="POST">
+                            <form id="checkout-form" method="POST">
                                 {% csrf_token %}
-                                <button type="submit">Checkout</button>
+                                <button type="submit" id="checkout-button">Checkout</button>
                             </form>
                             <p>Still unsure if we are right for you? Please call 0421286031 to have any questions answered.</p>
                         </div>
@@ -118,30 +118,13 @@
             {% endif %}
         </div>
     </section>
-    <section>
-        <div class="product">
-            <div class="description">
-                <h3>{{ product.name }}</h3>
-                <hr />
-                {% for price in prices %}
- 
-                <div>
-                    <h5>${{ price.get_display_price }}</h5>
-                    <form action="{% url 'create-checkout-session' price.id %}" method="POST">
-                        {% csrf_token %}
-                        <button type="submit">Checkout</button>
-                    </form>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-    </section>
 {% endblock %}
 
 {% block script %}
     <script>
         var csrfToken = "{{ csrf_token }}";
         var tutorId = "{{ tutor.id }}";
+        var checkOutUrl = "{% url 'create-checkout-session' %}"
     </script>
     <script src="{% static 'javascript/tuto.js' %}"></script>
     <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>

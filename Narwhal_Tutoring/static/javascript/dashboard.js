@@ -48,11 +48,32 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-   
     // Calendar
     var calendarEl = document.getElementById('calendar');
 
     var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'timeGridWeek',
+        timeZone: 'Asia/Singapore',
+        locale: 'en-AU',
+        slotMinTime: '08:00:00',
+        slotMaxTime: '22:00:00',
+        events: {
+            url: `/get_availability/${tutorId}`,
+            headers: {
+                'X-CSRFToken': getCSRFToken()
+            },
+            display: 'background',
+        }
+    })
+
+    setTimeout(function() {
+        calendar.render();
+    });
+   
+    // AvailabilityCalendar
+    var availabilityCalendarEl = document.getElementById('availability-calendar');
+
+    var availabilityCalendar = new FullCalendar.Calendar(availabilityCalendarEl, {
         initialView: 'timeGridWeek',
         timeZone: 'Asia/Singapore',
         locale: 'en-AU',
@@ -74,12 +95,12 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     setTimeout(function() {
-        calendar.render();
+        availabilityCalendar.render();
     });
     
     function handleSelect(arg) {
         // Check if the selected time range overlaps with existing events
-        var isOverlapping = calendar.getEvents().some(function (existingEvent) {
+        var isOverlapping = availabilityCalendar.getEvents().some(function (existingEvent) {
             return (
                 arg.start < existingEvent.end && arg.end > existingEvent.start &&
                 existingEvent.groupId === 'availabilityGroup'
@@ -111,16 +132,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 end: arg.end
             };
 
-            calendar.addEvent(tempEvent);
+            availabilityCalendar.addEvent(tempEvent);
 
              // Save the event to the database (you need to implement this part)
             saveEventToDatabase(newEvent);
     
             // Unselect the currently selected time range
-            calendar.unselect();
+            availabilityCalendar.unselect();
         } else {
             alert('Events cant overlap nor span multiple days.');
-            calendar.unselect();
+            availabilityCalendar.unselect();
         }
     }
     

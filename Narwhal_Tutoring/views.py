@@ -217,7 +217,7 @@ def tutor(request, tutor_id):
             "prices": prices,
             'tutor': tutor,
         }
-        
+
         return render(request, "Narwhal_Tutoring/tutor.html", context)
     except Exception as e:
         messages.error(request, f'{tutor_id} is not a tutor. {e}', extra_tags='danger')
@@ -299,15 +299,6 @@ def get_availability(request, tutor_id):
                 'daysOfWeek': [availability.day_of_week],
             })
 
-            '''            
-            events.append({
-                'title': 'Recurring Event',
-                'groupId': 'test',
-                'daysOfWeek': [availability.day_of_week],
-                'startTime': availability.start_time,
-                'endTime': availability.end_time, 
-            })'''
-
         return JsonResponse(events, safe=False)
 
 def update_availability(request):
@@ -326,9 +317,38 @@ def update_availability(request):
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=400)
     
-def create_checkout_session(request, pk):
-    print(pk)
-    price = Price.objects.get(id=pk)
+def create_checkout_session(request):
+    user = request.user
+    try:
+        # Try to get the single cart associated with the user
+        cart_instance = user.carts.get(paid=False)
+        # Now, cart_instance holds the single Cart instance
+    except Cart.DoesNotExist:
+        # Handle the case where no cart is found
+        print("No cart found for this user.")
+    except Cart.MultipleObjectsReturned:
+        # Handle the case where multiple carts are found (unexpected)
+        print("Multiple carts found for this user. Investigate the data.")
+
+    lessons = cart_instance.lessons.all()
+    total_duration = sum((lesson.end_time - lesson.start_time).total_seconds() / 3600 for lesson in lessons)
+    
+
+    if total_duration < 5:
+        price = Price.objects.get(price=3500)
+    elif total_duration < 10:
+        price = Price.objects.get(price=3150)
+    else:
+        price = Price.objects.get(price=3000)
+    
+    quantity = int(total_duration/0.5)
+
+    print("\n")
+    print(lessons)
+    print(total_duration)
+    print(quantity)
+    print(price.stripe_price_id)
+
     domain = "https://yourdomain.com"
     if settings.DEBUG:
         domain = "http://127.0.0.1:8000"
@@ -338,30 +358,61 @@ def create_checkout_session(request, pk):
         line_items=[
             {
                 'price': price.stripe_price_id,
-                'quantity': 1,
+                'quantity': quantity,
             },
         ],
         mode='payment',
         success_url=domain + '/success/',
         cancel_url=domain + '/cancel/',
     )
-    
+
+    # Add a success message if needed
+    messages.success(request, "Checkout session created successfully.")
+
     return redirect(checkout_session.url)
 
 def success(request):
+    user = request.user
+    car = Cart.objects.get(user=user, paid=False)
+    car.paid = True
+    car.save()
+
     return render(request, 'Narwhal_Tutoring/success.html')
 
 def cancel(request):
     return render(request, 'Narwhal_Tutoring/cancel.html')
 
-def landing(request):
-    product = Product.objects.get(name="Test Product")
-    prices = Price.objects.filter(product=product)
-    
-    context = {
-        "product": product,
-        "prices": prices
-    }
-    
-    return render(request, 'Narwhal_Tutoring/landing.html', context)
+def save_lessons_to_cart(request):
+    if request.method == 'POST':
+        print("Saving Lessons... \n\n\n\n\n\n\n\n")
 
+        data = json.loads(request.body.decode('utf-8'))
+        lessons_data = data.get('lessons_data', [])
+
+        tutor_id = data.get('tutorId')
+        tutor = User.objects.get(id=tutor_id)
+
+        print(tutor)
+        print(data)
+
+        user = request.user
+        Cart.objects.filter(user=user, paid=False).delete()
+        cart = Cart.objects.create(user=user, paid=False)
+
+        for lesson_data in lessons_data:
+            if lesson_data.get('title') != 'Availability':
+                Lesson.objects.create(
+                    cart=cart,
+                    tutor=tutor,
+                    name=lesson_data.get('title', 'Lesson'),
+                    start_time=lesson_data.get('start'),
+                    end_time=lesson_data.get('end')
+                )
+
+        lessons = Lesson.objects.filter(tutor=tutor)
+        print("Save completed: ")
+        print(lessons)
+
+        return JsonResponse({'message': 'Lessons saved to cart successfully'})
+    else:
+        return JsonResponse({'error': 'Invalid request method'})

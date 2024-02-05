@@ -27,6 +27,7 @@
               <div class="list-group" id="list-tab" role="tablist">
                 <a class="list-group-item list-group-item-action active" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="profile">Profile</a>
                 <a class="list-group-item list-group-item-action" id="list-availabilities-list" data-toggle="list" href="#list-availabilities" role="tab" aria-controls="availabilities">Availabilities</a>
+                <a class="list-group-item list-group-item-action" id="list-calendar-list" data-toggle="list" href="#list-calendar" role="tab" aria-controls="calendar">Calendar</a>
                 <a class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list" href="#list-settings" role="tab" aria-controls="settings">Settings</a>
               </div>
             </div>
@@ -142,6 +143,10 @@
                 </div>
                 <div class="tab-pane fade" id="list-availabilities" role="tabpanel" aria-labelledby="list-availabilities-list">
                     <h3>Availabilities (Perth Timezone)</h3>
+                    <div id='availability-calendar'></div>
+                </div>
+                <div class="tab-pane fade" id="list-calendar" role="tabpanel" aria-labelledby="list-calendar-list">
+                    <h3>Calendar (Perth Timezone)</h3>
                     <div id='calendar'></div>
                 </div>
                 <div class="tab-pane fade" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">

@@ -65,4 +65,17 @@ class Price(models.Model):
     
     def get_display_price(self):
         return "{0:.2f}".format(self.price / 100)
-    
+
+class Lesson(models.Model):
+    cart = models.ForeignKey('Cart', on_delete=models.CASCADE, related_name="lessons")
+    tutor = models.ForeignKey('User', on_delete=models.CASCADE, related_name='lessons')
+    name = models.CharField(max_length=255)
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+
+    def __str__(self):
+        return f"{self.name}: {self.start_time} - {self.end_time}"
+
+class Cart(models.Model):
+    user = models.ForeignKey('User', on_delete=models.CASCADE, related_name='carts')
+    paid = models.BooleanField(default=False)

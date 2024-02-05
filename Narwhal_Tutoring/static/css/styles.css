@@ -496,7 +496,7 @@ font-weight: 300;
 #times-booked {
     margin: 10px;
     min-width: 200px;
-    min-height: 300px;
+    min-height: 400px;
 }
 
 .booking-info {
@@ -507,6 +507,10 @@ font-weight: 300;
 
 #times-booked {
     margin: 10px;
+}
+
+#checkout-button {
+    display: none;
 }
 
 #pricing-info {
@@ -542,4 +546,8 @@ font-weight: 300;
 
 #calendar {
     height: 850px;
+} 
+
+#availability-calendar {
+    height: 200px;
 }

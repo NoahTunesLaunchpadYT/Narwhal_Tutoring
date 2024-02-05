@@ -18,10 +18,11 @@ urlpatterns = [
     path('save_availability/', views.save_availability, name='save_availability'),
     path('delete_availability/<int:event_id>/', views.delete_availability, name='delete_availability'),
     path('get_availability/<int:tutor_id>', views.get_availability, name='get_availability'),
-    path('create-checkout-session/<pk>/', views.create_checkout_session, name='create-checkout-session'),
+    path('get_availability_and_lessons/<int:tutor_id>', views.get_availability, name='get_availability'),
+    path('create-checkout-session/', views.create_checkout_session, name='create-checkout-session'),
     path('cancel/', views.cancel, name='cancel'),
     path('success/', views.success, name='success'),
-    path('landing/', views.landing, name='landing'),
+    path('save-lessons-to-cart/', views.save_lessons_to_cart, name='save-lessons-to-cart'),
 ]
 
 if settings.DEBUG:

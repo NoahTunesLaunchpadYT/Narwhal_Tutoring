@@ -39,26 +39,25 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   function allow(dropInfo) {
-    var allEvents = calendar.getEvents();
     var currentDate = new Date();
     var inside = false;
   
-    for (var i = 0; i < allEvents.length; i++) {
-      var event = allEvents[i];
-  
-      // Check if the event is within the allowed time range
-      if (event.end >= currentDate) {
-        // Check if the event is within the allowed time range
-        if (event.end < currentDate.getDate() + 4) {
-          alert("Bookings made less than four days in advance fall under our late bookings policy in our terms of service.");
-        }
-        // Check if the new event overlaps with an existing event
-        if (event.start <= dropInfo.start && event.end >= dropInfo.end) {
-          inside = true;
-        }
-      } else {
-        alert("Please select a future date.");
+    var event = dropInfo
+
+    console.log(event.start);
+    console.log(currentDate);
+
+    // Check if the event is within the allowed time range
+    var fourDaysInAdvance = new Date();
+    fourDaysInAdvance.setDate(currentDate.getDate() + 4);
+
+    if (event.start >= currentDate) {
+      // Check if the new event overlaps with an existing event
+      if (event.start <= dropInfo.start && event.end >= dropInfo.end) {
+        inside = true;
       }
+    } else {
+      alert("Please select a future date.");
     }
   
     return inside;
@@ -204,6 +203,10 @@ document.addEventListener('DOMContentLoaded', () => {
       let priceCardId = "#hr-" + bundle;
       let priceCard = document.querySelector(priceCardId);
       priceCard.style.backgroundColor = 'lightblue';
+
+      var checkoutButton = document.getElementById('checkout-button');
+      checkoutButton.style.display = 'block';  // Set the display property to 'block' or 'inline' as needed
+      checkoutButton.disabled = false;  // Enable the button
     } else {
 
       message = document.createElement('p');
@@ -217,18 +220,30 @@ document.addEventListener('DOMContentLoaded', () => {
       event.preventDefault();
 
       const cart = calendar.getEvents();
+      console.log(cart)
 
-      
+      fetch('/save-lessons-to-cart/', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': csrfToken,
+          },
+          body: JSON.stringify({ 
+            'lessons_data': cart,
+            'tutorId': tutorId, 
+          }),
+      })
+      .then(response => response.json())
+      .then(data => {
+          console.log(data.message); // You can handle success here
+          form.action = `${checkOutUrl}`
 
-      // Get the price ID and quantity from your JavaScript logic
-      var priceId = "price_1OfzEfKCFeavPzHiTpY33afM";
-      var quantity = 3;
-
-      // Modify the form action URL
-      form.action = "{% url 'create-checkout-session' 0 %}".replace('0', priceId) + '/' + quantity + '/';
-
-      // Submit the form
-      form.submit();
+          // Submit the form
+          form.submit();
+      })
+      .catch(error => {
+          console.error('Error:', error);
+      });
   });
 
 });
