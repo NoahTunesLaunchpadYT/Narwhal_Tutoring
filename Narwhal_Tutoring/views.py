@@ -349,9 +349,10 @@ def create_checkout_session(request):
     print(quantity)
     print(price.stripe_price_id)
 
-    domain = "https://yourdomain.com"
     if settings.DEBUG:
         domain = "http://127.0.0.1:8000"
+    else:
+        domain = "https://" + request.get_host()
     
     checkout_session = stripe.checkout.Session.create(
         payment_method_types=['card'],
