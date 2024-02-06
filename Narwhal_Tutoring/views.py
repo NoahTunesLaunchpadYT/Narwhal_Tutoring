@@ -362,7 +362,7 @@ def create_checkout_session(request):
             },
         ],
         mode='payment',
-        success_url=domain + '/success/',
+        success_url=domain + f'/success/{cart_instance.id}', #FIX THIS
         cancel_url=domain + '/cancel/',
     )
 
@@ -371,13 +371,33 @@ def create_checkout_session(request):
 
     return redirect(checkout_session.url)
 
-def success(request):
-    user = request.user
-    car = Cart.objects.get(user=user, paid=False)
-    car.paid = True
-    car.save()
+@login_required(login_url='login')
+def success(request, cart_id):
+    try:
+        cart = Cart.objects.get(id=cart_id)
+    except Exception as e:
+        print(e)
+        return HttpResponseRedirect(reverse('index'))
 
-    return render(request, 'Narwhal_Tutoring/success.html')
+    if cart.user != request.user:
+        print("Error: cart user isn't request user")
+        return HttpResponseRedirect(reverse('index'))
+    
+    if cart.paid == True:
+        print("Error: cart already paid for")
+        message = None
+    else:
+        message = "Your payment has been successful!"
+    
+    cart.paid = True
+    cart.save()
+    
+    tutor = cart.lessons.all()[0].tutor
+
+    return render(request, 'Narwhal_Tutoring/success.html', {
+        "tutor": tutor,
+        "message": message
+    })
 
 def cancel(request):
     return render(request, 'Narwhal_Tutoring/cancel.html')

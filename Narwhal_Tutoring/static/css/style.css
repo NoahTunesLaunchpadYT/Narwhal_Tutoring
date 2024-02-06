@@ -317,7 +317,7 @@ ul {
     background-size: 100% 100%;
 }
 
-.contacts .contact {
+.contact {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -327,13 +327,13 @@ ul {
     background: #ffffff;
 }
 
-.contacts .contact img {
+.contact img {
     height: 400px;
     width: 400px;
     
 }
 
-.contacts .contact .text-box {
+.contact .text-box {
     width: 400px;
     height: 400px;
     padding: 20px;
@@ -536,10 +536,12 @@ font-weight: 300;
 /* tutors section */
 
 .subject-filter {
+    height: 300px;
     background-color: white;
     border: 1px solid black;
     border-radius: 10px;
     padding: 20px;
+    overflow-y: auto;
 }
 
 /* Calendar */
@@ -550,4 +552,40 @@ font-weight: 300;
 
 #availability-calendar {
     height: 200px;
+}
+
+/* Success page */
+
+.whatsapp-and-mobile-card {
+    padding: 20px;
+    margin: 20px 0px;
+    box-shadow: 20px 20px 38px rgba(0, 0, 0, 0.03);
+    border: 1px solid #cce7d0;
+    background-color: white;
+    border-radius: 20px;
+}
+
+.whatsapp-and-mobile-card:hover {
+    box-shadow: 10px 10px 70px rgba(70, 62, 221, 0.15);
+}
+
+#success-textbox {
+    padding: 20px;
+    box-shadow: 20px 20px 38px rgba(0, 0, 0, 0.03);
+    border: 1px solid #cce7d0;
+    background-color: white;
+    border-radius: 20px;
+}
+
+#success-textbox:hover {
+    box-shadow: 10px 10px 70px rgba(70, 62, 221, 0.15);
+}
+
+.success-contact {
+    padding: 100px;
+    background-image: url("../images/contact-us-background.png");
+    background-size: 100% 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
 }

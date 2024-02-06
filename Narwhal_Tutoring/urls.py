@@ -21,7 +21,7 @@ urlpatterns = [
     path('get_availability_and_lessons/<int:tutor_id>', views.get_availability, name='get_availability'),
     path('create-checkout-session/', views.create_checkout_session, name='create-checkout-session'),
     path('cancel/', views.cancel, name='cancel'),
-    path('success/', views.success, name='success'),
+    path('success/<int:cart_id>', views.success, name='success'),
     path('save-lessons-to-cart/', views.save_lessons_to_cart, name='save-lessons-to-cart'),
 ]
 
