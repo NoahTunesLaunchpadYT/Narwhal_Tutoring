@@ -203,15 +203,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     tabLinks.forEach(function (link) {
         link.addEventListener('click', function (event) {
+            console.log("Tab pressed")
+            setTimeout(function() {
+                calendar.render();
+                availabilityCalendar.render();
+            }, 50);
             event.preventDefault();
             var targetTab = this.getAttribute('href').substr(1);
             history.pushState({ tab: targetTab }, null, this.getAttribute('href'));
-
-            setTimeout(function() {
-                console.log("rerender")
-                calendar.render();
-                availabilityCalendar.render();
-            }, 300);
         });
     });
 

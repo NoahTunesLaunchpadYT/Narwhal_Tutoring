@@ -38,7 +38,7 @@ class Availability(models.Model):
     group_id = models.CharField(max_length=255)
     start_time = models.CharField(max_length=20)  # Adjust the max length as needed
     end_time = models.CharField(max_length=20)    # Adjust the max length as needed
-    event_id = models.IntegerField()
+    event_id = models.CharField(max_length=255)
     day_of_week = models.IntegerField()
 
     def __str__(self):
@@ -72,6 +72,7 @@ class Lesson(models.Model):
     name = models.CharField(max_length=255)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
+    event_id = models.CharField(max_length=255)
 
     def __str__(self):
         return f"{self.name}: {self.start_time} - {self.end_time}"

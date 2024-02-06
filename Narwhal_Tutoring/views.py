@@ -220,7 +220,7 @@ def tutor(request, tutor_id):
 
         return render(request, "Narwhal_Tutoring/tutor.html", context)
     except Exception as e:
-        messages.error(request, f'{tutor_id} is not a tutor. {e}', extra_tags='danger')
+        messages.error(request, f'{e}', extra_tags='danger')
         return render(request, "Narwhal_Tutoring/tutor.html")
 
 def save_availability(request):
@@ -279,7 +279,6 @@ def delete_availability(request, event_id):
 
 def get_availability(request, tutor_id):
     if request.method == 'GET':
-        # Assuming the logged-in user is the tutor
         tutor = User.objects.get(id=tutor_id)
 
         # Fetch availability events for the tutor
@@ -297,7 +296,43 @@ def get_availability(request, tutor_id):
                 'endTime': availability.end_time, 
                 'groupId': availability.group_id,
                 'daysOfWeek': [availability.day_of_week],
+                'display': 'background',
             })
+
+        return JsonResponse(events, safe=False)
+    
+
+def get_availability_and_lessons(request, tutor_id):
+    if request.method == 'GET':
+        tutor = User.objects.get(id=tutor_id)
+
+        # Fetch events for the tutor
+        availability_events = Availability.objects.filter(tutor=tutor)
+        lesson_events = tutor.lessons.all()
+
+        # Convert events to a format suitable for FullCalendar
+        events = []
+        for availability in availability_events:
+            events.append({
+                'id': availability.event_id,
+                'title': availability.title,
+                'startTime': availability.start_time,
+                'endTime': availability.end_time, 
+                'groupId': availability.group_id,
+                'daysOfWeek': [availability.day_of_week],
+                'display': 'background'
+            })
+
+        print("We made it here")
+
+        for lesson in lesson_events:
+            if lesson.cart.paid == True:
+                events.append({
+                    'id': lesson.event_id,
+                    'title': lesson.cart.user.username,
+                    'start': lesson.start_time,
+                    'end': lesson.end_time, 
+                })
 
         return JsonResponse(events, safe=False)
 
@@ -427,7 +462,8 @@ def save_lessons_to_cart(request):
                     tutor=tutor,
                     name=lesson_data.get('title', 'Lesson'),
                     start_time=lesson_data.get('start'),
-                    end_time=lesson_data.get('end')
+                    end_time=lesson_data.get('end'),
+                    event_id=lesson_data.get('id', 0)
                 )
 
         lessons = Lesson.objects.filter(tutor=tutor)

@@ -207,11 +207,16 @@ document.addEventListener('DOMContentLoaded', function() {
             var targetTab = this.getAttribute('href').substr(1);
             history.pushState({ tab: targetTab }, null, this.getAttribute('href'));
 
+            console("updating size")
+
             setTimeout(function() {
                 console.log("rerender")
                 calendar.render();
                 availabilityCalendar.render();
-            }, 300);
+            }, 1000);
+            
+            calendar.updateSize()
+            availabilityCalendar.updateSize()
         });
     });
 

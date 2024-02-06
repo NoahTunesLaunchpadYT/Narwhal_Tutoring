@@ -25,8 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
           headers: {
               'X-CSRFToken': csrfToken
           },
-          // Default properties for events
-          display: 'background', // or any other default property
       },
       eventClick: handleEventClick,
       select: handleSelect,
@@ -34,33 +32,41 @@ document.addEventListener('DOMContentLoaded', () => {
       eventStartEditable: true,
       eventResizableFromStart: true,
       eventDurationEditable: true,
-      eventAllow: allow,
-      selectAllow: allow,
+      eventAllow: eventAllow,
+      selectAllow: eventAllow,
+      selectOverlap: function(event) {
+        if (event.display === 'background'){
+          console.log("intersecting")
+        }
+        return event.display === 'background';
+      }
   });
 
-  function allow(dropInfo) {
+  function eventAllow(dropInfo) {
+    var allEvents = calendar.getEvents();
     var currentDate = new Date();
-    var inside = false;
+    var allow = false;
   
-    var event = dropInfo
-
-    console.log(event.start);
-    console.log(currentDate);
-
-    // Check if the event is within the allowed time range
-    var fourDaysInAdvance = new Date();
-    fourDaysInAdvance.setDate(currentDate.getDate() + 4);
-
-    if (event.start >= currentDate) {
-      // Check if the new event overlaps with an existing event
-      if (event.start <= dropInfo.start && event.end >= dropInfo.end) {
-        inside = true;
+    if (dropInfo.end >= currentDate) {
+      for (var i = 0; i < allEvents.length; i++) {
+        var event = allEvents[i];
+    
+        // Check if the new event overlaps with an existing event
+        if (event.start <= dropInfo.start && event.end >= dropInfo.end) {
+          allow = true;
+        } else {
+          console.log(`${dropInfo.start}-${dropInfo.end} not in availability ${event.start}-${event.end}\n`)
+        }
       }
     } else {
-      alert("Please select a future date.");
+      console.log("Can't select time in past.")
+    }
+
+    if (allow == false){
+      console.log("Not in availability")
     }
   
-    return inside;
+    return allow;
   }
   
 
@@ -118,6 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         console.log("Invalid input. Please enter a valid integer greater than 0.");
     }
+    calendar.unselect()
   }
 
   setTimeout(function() {

@@ -211,7 +211,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log("rerender")
                 calendar.render();
                 availabilityCalendar.render();
-            }, 300);
+            }, 10);
         });
     });
 

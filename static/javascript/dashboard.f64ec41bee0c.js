@@ -58,17 +58,13 @@ document.addEventListener('DOMContentLoaded', function() {
         slotMinTime: '08:00:00',
         slotMaxTime: '22:00:00',
         events: {
-            url: `/get_availability/${tutorId}`,
+            url: `/get_availability_and_lessons/${tutorId}`, // Update the endpoint
             headers: {
                 'X-CSRFToken': getCSRFToken()
             },
-            display: 'background',
         }
     })
 
-    setTimeout(function() {
-        calendar.render();
-    });
    
     // AvailabilityCalendar
     var availabilityCalendarEl = document.getElementById('availability-calendar');
@@ -95,6 +91,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     setTimeout(function() {
+        calendar.render();
         availabilityCalendar.render();
     });
     
@@ -209,6 +206,17 @@ document.addEventListener('DOMContentLoaded', function() {
             event.preventDefault();
             var targetTab = this.getAttribute('href').substr(1);
             history.pushState({ tab: targetTab }, null, this.getAttribute('href'));
+
+            console.log("updating size")
+
+            setTimeout(function() {
+                console.log("rerender")
+                calendar.render();
+                availabilityCalendar.render();
+            }, 1000);
+            
+            calendar.updateSize()
+            availabilityCalendar.updateSize()
         });
     });
 
@@ -223,6 +231,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function showTab(tabId) {
+
         tabLinks.forEach(function (link) {
             link.classList.remove('active');
         });
