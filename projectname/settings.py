@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-
+import dj_database_url
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -85,13 +85,28 @@ WSGI_APPLICATION = 'projectname.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+else:  
+    # Parse the default DATABASE_URL environment variable from Railway
+    db_from_env = dj_database_url.config(default=os.getenv('RAILWAY_DATABASE_URL'))
 
+    # Update DATABASES with the parsed configuration
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'HOST': db_from_env['HOST'],
+            'PORT': db_from_env['PORT'],
+            'NAME': db_from_env['NAME'],
+            'USER': db_from_env['USER'],
+            'PASSWORD': db_from_env['PASSWORD'],
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
