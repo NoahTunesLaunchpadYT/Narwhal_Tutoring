@@ -301,8 +301,30 @@ def get_availability(request, tutor_id):
 
         return JsonResponse(events, safe=False)
     
+def get_client_calendar(request):
+    if request.method == 'GET':
+        user = request.user
 
-def get_availability_and_lessons(request, tutor_id):
+        # Fetch events for the tutor
+        carts = user.carts.all()
+
+        # Convert events to a format suitable for FullCalendar
+        events = []
+
+        for cart in carts:
+            for lesson in cart.lessons.all():
+                events.append({
+                    'id': lesson.event_id,
+                    'title': lesson.tutor.username,
+                    'groupId': 'booked',
+                    'start': lesson.start_time,
+                    'end': lesson.end_time, 
+                })
+
+        return JsonResponse(events, safe=False)
+
+
+def get_calendar(request, tutor_id):
     if request.method == 'GET':
         tutor = User.objects.get(id=tutor_id)
 
@@ -323,7 +345,40 @@ def get_availability_and_lessons(request, tutor_id):
                 'display': 'background'
             })
 
-        print("We made it here")
+        for lesson in lesson_events:
+            if lesson.cart.paid == True:
+                events.append({
+                    'id': lesson.event_id,
+                    'title': 'Booked',
+                    'groupId': 'booked',
+                    'start': lesson.start_time,
+                    'end': lesson.end_time, 
+                    'backgroundColor': 'red',
+                })
+
+        return JsonResponse(events, safe=False)
+
+def get_availability_and_lessons(request, tutor_id):
+    print("Getting availabilities and lessons.")
+    if request.method == 'GET':
+        tutor = User.objects.get(id=tutor_id)
+
+        # Fetch events for the tutor
+        availability_events = Availability.objects.filter(tutor=tutor)
+        lesson_events = tutor.lessons.all()
+
+        # Convert events to a format suitable for FullCalendar
+        events = []
+        for availability in availability_events:
+            events.append({
+                'id': availability.event_id,
+                'title': availability.title,
+                'startTime': availability.start_time,
+                'endTime': availability.end_time, 
+                'groupId': availability.group_id,
+                'daysOfWeek': [availability.day_of_week],
+                'display': 'background'
+            })
 
         for lesson in lesson_events:
             if lesson.cart.paid == True:
@@ -377,12 +432,6 @@ def create_checkout_session(request):
         price = Price.objects.get(price=3000)
     
     quantity = int(total_duration/0.5)
-
-    print("\n")
-    print(lessons)
-    print(total_duration)
-    print(quantity)
-    print(price.stripe_price_id)
 
     if settings.DEBUG:
         domain = "http://127.0.0.1:8000"
@@ -440,23 +489,18 @@ def cancel(request):
 
 def save_lessons_to_cart(request):
     if request.method == 'POST':
-        print("Saving Lessons... \n\n\n\n\n\n\n\n")
-
         data = json.loads(request.body.decode('utf-8'))
         lessons_data = data.get('lessons_data', [])
 
         tutor_id = data.get('tutorId')
         tutor = User.objects.get(id=tutor_id)
 
-        print(tutor)
-        print(data)
-
         user = request.user
         Cart.objects.filter(user=user, paid=False).delete()
         cart = Cart.objects.create(user=user, paid=False)
 
         for lesson_data in lessons_data:
-            if lesson_data.get('title') != 'Availability':
+            if lesson_data.get('title') != 'Availability' and lesson_data.get('title') != "Booked":
                 Lesson.objects.create(
                     cart=cart,
                     tutor=tutor,

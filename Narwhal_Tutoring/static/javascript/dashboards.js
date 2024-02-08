@@ -1,26 +1,31 @@
 document.addEventListener('DOMContentLoaded', function() {
-    //Availability
-    var btnAvailable = document.getElementById('btnAvailable');
-    var btnUnavailable = document.getElementById('btnUnavailable');
+    if (userTutor == "True"){
+        console.log("I am a tutor");
 
-    function updateButtonStyles(clickedButton, otherButton) {
-        clickedButton.classList.remove('btn-secondary');
-        clickedButton.classList.add('btn-primary');
-        otherButton.classList.remove('btn-primary');
-        otherButton.classList.add('btn-secondary');
+        var btnAvailable = document.getElementById('btnAvailable');
+        var btnUnavailable = document.getElementById('btnUnavailable');
+    
+        function updateButtonStyles(clickedButton, otherButton) {
+            clickedButton.classList.remove('btn-secondary');
+            clickedButton.classList.add('btn-primary');
+            otherButton.classList.remove('btn-primary');
+            otherButton.classList.add('btn-secondary');
+        }
+    
+        btnAvailable.addEventListener('click', function () {
+            console.log(`${btnAvailable} clicked`);
+            updateAvailability(true);
+            updateButtonStyles(btnAvailable, btnUnavailable);
+        });
+    
+        btnUnavailable.addEventListener('click', function () {
+            console.log(`${btnUnavailable} clicked`);
+            updateAvailability(false);
+            updateButtonStyles(btnUnavailable, btnAvailable);
+        });
+    } else {
+        console.log("I am a client");
     }
-
-    btnAvailable.addEventListener('click', function () {
-        console.log(`${btnAvailable} clicked`);
-        updateAvailability(true);
-        updateButtonStyles(btnAvailable, btnUnavailable);
-    });
-
-    btnUnavailable.addEventListener('click', function () {
-        console.log(`${btnUnavailable} clicked`);
-        updateAvailability(false);
-        updateButtonStyles(btnUnavailable, btnAvailable);
-    });
 
     function updateAvailability(available) {
         // Perform asynchronous update here
@@ -47,52 +52,132 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error updating availability:', error);
         });
     }
-    
+
     // Calendar
     var calendarEl = document.getElementById('calendar');
-
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'timeGridWeek',
-        timeZone: 'Asia/Singapore',
-        locale: 'en-AU',
-        slotMinTime: '08:00:00',
-        slotMaxTime: '22:00:00',
-        events: {
-            url: `/get_availability_and_lessons/${tutorId}`, // Update the endpoint
-            headers: {
-                'X-CSRFToken': getCSRFToken()
-            },
+    if (calendarEl) {
+        console.log(userTutor)
+        if (userTutor == "True"){
+            console.log("Creating tutor's calendar");
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'timeGridWeek',
+                timeZone: 'Asia/Singapore',
+                locale: 'en-AU',
+                slotMinTime: '08:00:00',
+                slotMaxTime: '22:00:00',
+                events: {
+                    url: `/get_availability_and_lessons/${tutorId}`,
+                    headers: {
+                        'X-CSRFToken': getCSRFToken()
+                    },
+                },
+            });
+        } else{
+            
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'timeGridWeek',
+                timeZone: 'Asia/Singapore',
+                locale: 'en-AU',
+                slotMinTime: '08:00:00',
+                slotMaxTime: '22:00:00',
+                events: {
+                    url: `/get_client_calendar`,
+                    headers: {
+                        'X-CSRFToken': getCSRFToken()
+                    },
+                },
+            });
         }
-    })
 
-   
+        calendar.render();
+        setTimeout(function() {
+            updateBookedTimesList();
+        }, 700);
+    }
+
+    function updateBookedTimesList() {
+        allEvents = calendar.getEvents();
+
+        allEvents.sort(function (a, b) {
+            return a.start - b.start;
+        });
+    
+        // Clear the current list
+        var timesBookedDiv = document.querySelector('#times-booked');
+        timesBookedDiv.innerHTML = '';
+
+        var currentTime = new Date();
+        
+        if (allEvents){
+            console.log("Adding events to list.")
+            // Create a new list based on the bookedTimes array
+            let selectedMessage = document.createElement('p');
+            selectedMessage.textContent = "Booked times: "
+            timesBookedDiv.appendChild(selectedMessage);
+        
+            allEvents.forEach((event) => {
+                if(event.title != "Availability") {
+                    var eventStart = new Date(event.start);
+                    var listItem = document.createElement('li');
+                    var date = event.start;
+    
+                    // Compare event start time with current time
+                    if (eventStart < currentTime) {
+                        // Time has already happened, color it grey
+                        listItem.style.color = 'lightgrey';
+                    } else {
+                        // It is the next one to happen, color it red
+                        listItem.style.color = 'green';
+                    }
+                    
+                    // Extract components from the date
+                    var year = date.getUTCFullYear();
+                    var month = (date.getUTCMonth() + 1).toString().padStart(2, '0'); // Months are zero-based
+                    var day = date.getUTCDate().toString().padStart(2, '0');
+                    var hours = date.getUTCHours().toString().padStart(2, '0');
+                    var minutes = date.getUTCMinutes().toString().padStart(2, '0');
+    
+                    // Format the date string manually
+                    var formattedTime = `${day}/${month}/${year} ${hours}:${minutes}`;
+                    listItem.textContent = formattedTime;
+                    timesBookedDiv.appendChild(listItem);
+                }
+            })
+        } else {
+            timesBookedDiv.innerHTML = 'You have no lessons booked.';
+        }
+    }
+
     // AvailabilityCalendar
     var availabilityCalendarEl = document.getElementById('availability-calendar');
-
-    var availabilityCalendar = new FullCalendar.Calendar(availabilityCalendarEl, {
-        initialView: 'timeGridWeek',
-        timeZone: 'Asia/Singapore',
-        locale: 'en-AU',
-        slotMinTime: '08:00:00',
-        slotMaxTime: '22:00:00',
-        selectable: true,
-        selectMirror: true,
-        eventOverlap: false,
-        events: {
-            url: `/get_availability/${tutorId}`,
-            headers: {
-                'X-CSRFToken': getCSRFToken()
+    if (availabilityCalendarEl) {
+        var availabilityCalendar = new FullCalendar.Calendar(availabilityCalendarEl, {
+            initialView: 'timeGridWeek',
+            timeZone: 'Asia/Singapore',
+            locale: 'en-AU',
+            slotMinTime: '08:00:00',
+            slotMaxTime: '22:00:00',
+            selectable: true,
+            selectMirror: true,
+            eventOverlap: false,
+            events: {
+                url: `/get_availability/${tutorId}`,
+                headers: {
+                    'X-CSRFToken': getCSRFToken()
+                },
             },
-            // Default properties for events
-            //display: 'background', // or any other default property
-        },
-        eventClick: handleEventClick,
-        select: handleSelect,
-    });
+            eventClick: handleEventClick,
+            select: handleSelect,
+        });
+        availabilityCalendar.render();
+    }
+
     
     setTimeout(function() {
         calendar.render();
-        availabilityCalendar.render();
+        if (availabilityCalendarEl){
+            availabilityCalendar.render();
+        }
     });
     
     function handleSelect(arg) {
@@ -208,10 +293,11 @@ document.addEventListener('DOMContentLoaded', function() {
             history.pushState({ tab: targetTab }, null, this.getAttribute('href'));
 
             setTimeout(function() {
-                console.log("rerender")
                 calendar.render();
-                availabilityCalendar.render();
-            }, 300);
+                if (availabilityCalendarEl){
+                    availabilityCalendar.render();
+                }
+            }, 200);
         });
     });
 

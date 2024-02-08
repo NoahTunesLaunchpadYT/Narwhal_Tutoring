@@ -21,14 +21,17 @@ document.addEventListener('DOMContentLoaded', () => {
       selectMirror: true,
       eventOverlap: true,
       events: {
-          url: `/get_availability/${tutorId}`,
+          url: `/get_calendar/${tutorId}`,
           headers: {
               'X-CSRFToken': csrfToken
           },
       },
       eventClick: handleEventClick,
       select: handleSelect,
-      editable: true,
+      editable: function(event) {
+        console.log("AAAAaa");
+        return event.title != "Booked";
+      },
       eventStartEditable: true,
       eventResizableFromStart: true,
       eventDurationEditable: true,

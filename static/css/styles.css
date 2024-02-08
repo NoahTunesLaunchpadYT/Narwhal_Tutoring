@@ -547,11 +547,7 @@ font-weight: 300;
 
 /* Calendar */
 
-#calendar {
-    height: 850px;
-} 
-
-#availability-calendar {
+.calendar {
     height: 850px;
 }
 
